@@ -8,7 +8,7 @@
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
     mysqli_select_db($con, "recipedia");
 
-    $email = mysql_real_escape_string($_POST["email"]);
+    $email = mysqli_real_escape_string($_POST["email"]);
 
     $sql = "SELECT count(*) as cnt from users where email = '$email'";
 
