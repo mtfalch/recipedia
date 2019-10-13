@@ -10,11 +10,7 @@
     $userID = mysql_real_escape_string($_POST["email"]);
     $password = mysql_real_escape_string($_POST["password"]);
 
-    $sql = "INSERT into users (email, password) values (' 
-        $userID
-        ',' 
-        $password
-        ');
+    $sql = "INSERT into users (email, password) values ('$userID','$password');
     mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
 
     $obj -> status = "SUCCESS";
