@@ -16,5 +16,4 @@
     $obj -> status = "SUCCESS";
     $json = json_encode($obj);
     echo $json;
-
 ?>

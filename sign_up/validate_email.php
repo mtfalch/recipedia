@@ -15,7 +15,7 @@
     $res = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
     $cnt = mysqli_fetch_array($res)['cnt'];
 
-    $obj -> singular = $cnt;
+    $obj -> singular = $cnt; 
     $json = json_encode($obj);
     echo $json;
 
