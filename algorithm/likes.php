@@ -11,13 +11,13 @@
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword, $serverDatabase);
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
-    
+
     $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
 
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
     if(mysqli_fetch_array($query)['cnt'] != 1){
         $obj->userIDValid = "F";
-        $echo json_encode($obj);
+        echo json_encode($obj);
         exit();
     }
 
@@ -42,13 +42,13 @@
                 $sql .= "-";
             $sql .= "$delta where dishID = $dishID";
             $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
-            
+
             $obj->likeStatus = 1;
         }else
             $obj->likeStatus = 0;
         exit();
     }else
         $obj->likeStatus = 2;
-    $echo json_encode($obj);
+    echo json_encode($obj);
 
 ?>
