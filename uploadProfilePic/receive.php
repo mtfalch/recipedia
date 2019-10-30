@@ -45,10 +45,8 @@
               if ($link->connect_error) {
                 die("Connection failed: " . $link->connect_error);
               }
-            /*$upload_sql = "INSERT INTO users (userID, password, pic)
-                           VALUES ('."$name."', '."$pwd."', '".$target_file."')"*/
-              $upload_sql = "INSERT INTO users (userID, password, pic)
-                            VALUES ('aaa', '111', '".$target_file."')";
+                //$upload_sql = "UPDATE users SET pic ='".$target_file."'WHERE userID='".$name."'";
+                $upload_sql = "UPDATE users SET pic ='".$target_file."'WHERE userID='aaa'";
 
               if (mysqli_query($link,$upload_sql)) {
                    echo "New record created successfully";
