@@ -17,7 +17,7 @@
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
     if(mysqli_fetch_array($query)['cnt'] != 1){
         $obj->userIDValid = "F";
-        $echo json_encode($obj);
+        echo json_encode($obj);
         exit();
     }
 
@@ -29,10 +29,10 @@
     $obj->userIDValid = "T";
     if(mysqli_num_rows($query) == 1){
         if($rows['likes'] != $like){
-        //likeStatus:
-        //  0: No Change
-        //  1: Change
-        //  2: Error
+            //likeStatus:
+            //  0: No Change
+            //  1: Change
+            //  2: Error
             //increment the popularity of the dish by $like * 3
             $delta = like * 3;
             $sql = "UPDATE dish_info set popularity = popularity";
@@ -49,6 +49,6 @@
         exit();
     }else
         $obj->likeStatus = 2;
-    $echo json_encode($obj);
-
+    echo json_encode($obj);
+    exit();
 ?>
