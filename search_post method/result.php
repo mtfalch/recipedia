@@ -23,10 +23,18 @@
 
   if(!$result) die("No information related to dishes");
 
-  $result->data_seek(0);
-  echo "The following are the dishes of ".$name. ":<br>";
-  while($row = $result->fetch_assoc())
+ if (mysqli_num_rows($result) > 0)
   {
-    echo $row['dishName']."<br>";
+      $result->data_seek(0);
+      echo "The following are the dishes of ".$name. ":<br>";
+      // output data of each row
+      while($row = $result->fetch_assoc())
+      {
+        echo $row['dishName']."<br>";
+      }
+  }
+  else
+  {
+      echo "There are no results about ".$name.".";
   }
  ?>

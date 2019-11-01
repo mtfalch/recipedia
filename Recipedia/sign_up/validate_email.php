@@ -8,9 +8,9 @@
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
     mysqli_select_db($con, "login");
 
-    $email = mysqli_real_escape_string($_POST["email"]);
+    $email = $_POST["email"];
 
-    $sql = "SELECT count(*) as cnt from users where email = '$email'";
+    $sql = "SELECT count(*) as cnt from users where username = '$email'";
 
     $res = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
     $cnt = mysqli_fetch_array($res)['cnt'];

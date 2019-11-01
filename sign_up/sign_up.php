@@ -5,12 +5,12 @@
     $serverPassword = "";
 
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
-    mysqli_select_db($con, "recipedia");
+    mysqli_select_db($con, "menu");
 
     $userID = mysqli_real_escape_string($_POST["email"]);
     $password = mysqli_real_escape_string($_POST["password"]);
 
-    $sql = "INSERT into users (email, password) values ('$userID','$password')";
+    $sql = "INSERT into users (userID, password) values ('$userID','$password')";
     mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
 
     $obj -> status = "SUCCESS";
