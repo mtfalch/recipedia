@@ -2,8 +2,8 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 30, 2019 at 07:30 AM
+-- Host: 127.0.0.1
+-- Generation Time: Nov 01, 2019 at 09:28 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -121,17 +121,22 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 --
 
 CREATE TABLE `users` (
-  `userID` varchar(10) NOT NULL,
-  `password` varchar(10) NOT NULL
+  `userID` varchar(64) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `pic` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `password`) VALUES
-('aaa', '111'),
-('bbb', '222');
+INSERT INTO `users` (`userID`, `password`, `pic`) VALUES
+('aaa', '111', 'web/cat1.jpg'),
+('bbb', '222', ''),
+('helloworld@gmail.com', 'helloworld123', ''),
+('mary0918@gmail.com', 'cmqgu879', ''),
+('meow@cat.com', 'ilovecat146', ''),
+('tom898@gmail.com', 'seeyou898', '');
 
 --
 -- Indexes for dumped tables
