@@ -12,6 +12,7 @@
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
     
+    //UserID Validation, only a registered user can perform like operations
     $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
 
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
@@ -34,9 +35,9 @@
             //  1: Change
             //  2: Error
             //increment the popularity of the dish by $like * 3
-            $delta = like * 3;
+            $delta = $like * 3;
             $sql = "UPDATE dish_info set popularity = popularity";
-            if(like > 0)
+            if($like > 0)
                 $sql .= "+";
             else
                 $sql .= "-";
