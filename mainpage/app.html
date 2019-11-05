@@ -99,6 +99,11 @@
             );
         }
 
+        //This function is used for handling select event of a selection set with common name
+        //When the selectedHandler will be applied to the clicked element
+        //The outsiderHandler will be applied to the rest of the elements
+        //This function is created to handler nav-bar selections
+        //Can be used to implement a custom radio button or checkbox field
         function utilInjectHandlerToNameSelectionSet(name, selectedHandler, outsiderHandler){
             var nameSet = document.getElementsByName(name);
             var setElement; for(setElement of nameSet){
