@@ -36,85 +36,6 @@
         }
     </style>
     <tmp>
-
-        <div 
-            id="sub" 
-            class="window elevate-9" 
-            style="background-color: rgba(0, 0, 0, 0.7);">
-            <div class="container small">
-                <div 
-                    id="subDisplay" 
-                    class="mg d20 w19 screen h18 center border-5" 
-                    style="background-color: white;">
-                </div>
-            </div>
-        </div>
-
-        <div 
-            id="recipeCard" 
-            class="mg d20 w18 x1 screen h10 h-auto margin elevate-3 border-2" 
-            style="overflow: hidden;">
-            <div 
-                id="imageField" 
-                class="mr d12 screen h7"
-                style="
-                    background-color: #EEE;
-                    border-bottom: 1px solid #EEEEEE;">
-                <div 
-                    id="imageBucket" 
-                    class="media-bucket mr d20 h19 v-center">
-                    <img id="image">
-                </div>
-            </div>
-            <div 
-                id="bottomBar" 
-                class="mr d12 screen h1" 
-                style="border-bottom: 1px solid #EEEEEE;">
-                <div 
-                    id="textColumn" 
-                    class="mc d12 w8">
-                    <div 
-                        id="textField" 
-                        class="text-bucket huge d12 x1 v-center">
-                    </div>
-                </div>
-                <div 
-                    id="likeButton" 
-                    class="mc d12 w2">
-                    <i 
-                        id="likeButtonIcon" 
-                        class="material-icons center"
-                        style="
-                            font-size: 36px; 
-                            color: #BBB;
-                            cursor: pointer;">
-                        thumb_up_alt
-                    </i>
-                </div>
-                <div 
-                    id="dislikeButton" 
-                    class="mc d12 w2">
-                    <i 
-                        id="dislikeButtonIcon" 
-                        class="material-icons center"
-                        style="
-                            font-size: 36px; 
-                            color: #BBB;
-                            cursor: pointer">
-                        thumb_down_alt
-                    </i>
-                </div>
-            </div>
-            <div 
-                id="tagsBar" 
-                class="mr d20 screen h1 h-auto">
-                <div 
-                    id="tagsList" 
-                    class="mc d15 w14 h-center">
-                </div>
-            </div>
-        </div>
-
     </tmp>
     <body>
         <div id="main" class="window">
@@ -173,6 +94,24 @@
         var recipeCardsBuffer = [];
          //*******************************************************************//
 
+        function templatingEngineGlobalInitialise(url, initialiseHandler){
+            var templateField = document.getElementsByTagName('tmp')[0];
+            fetch(url)
+                .then((response) => response.text())
+                .then((html) => {
+                    templateField.innerHTML = html;
+                    var templates = templateField.childNodes;
+                    var template; for(template of templates)
+                        if(template.nodeType == 1)
+                            templateCollections[template.id] = template;
+                    document.getElementsByTagName('body')[0].removeChild(templateField);
+                    initialiseHandler();
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        }
+
         //Create transistion effect for display update
         function refreshDisplayAnimation(refreshHandler){
             displayContainer.style.opacity = '0';
@@ -183,15 +122,6 @@
                 },
                 200
             );
-        }
-
-        function utilLoadTemplates(){
-            var templateField = document.getElementsByTagName('tmp')[0];
-            var templates = templateField.childNodes;
-            var template; for(template of templates)
-                if(template.nodeType == 1)
-                    templateCollections[template.id] = template;
-            document.getElementsByTagName('body')[0].removeChild(templateField);
         }
 
         function utilFetchTemplate(templateID){
@@ -353,25 +283,30 @@
                 newPageElement.scrollTop = newPageElement.scrollPosition;
             });
         }
+        templatingEngineGlobalInitialise(
+            'templates.html', 
+            function(){
 
-        //Scripting Starts Here
-        utilLoadTemplates();
-        initialiseNavBar();
-        createSearchField();
-        createRecipeList();
-        createRecipeInfoField();
-        createRecipeUploadField();
-        createSettingsField();
-        createRecipeCards(10);
+                //Scripting Starts Here
+                initialiseNavBar();
+                createSearchField();
+                createRecipeList();
+                createRecipeInfoField();
+                createRecipeUploadField();
+                createSettingsField();
+                createRecipeCards(10);
 
-        renderRecipeList(
-            [
-                {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-                {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-                {dishID: 3, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
-            ], 3);
+                renderRecipeList(
+                    [
+                        {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+                        {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+                        {dishID: 3, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
+                    ], 3);
 
-        recipesButton.onclick();
+                recipesButton.onclick();
+
+            }
+        );
 
     </script>
 </html>
