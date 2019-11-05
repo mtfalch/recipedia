@@ -185,7 +185,7 @@
             );
         }
 
-        function utilLoadTemplate(){
+        function utilLoadTemplates(){
             var templateField = document.getElementsByTagName('tmp')[0];
             var templates = templateField.childNodes;
             var template; for(template of templates)
@@ -355,7 +355,7 @@
         }
 
         //Scripting Starts Here
-        utilLoadTemplate();
+        utilLoadTemplates();
         initialiseNavBar();
         createSearchField();
         createRecipeList();
