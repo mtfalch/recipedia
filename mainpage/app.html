@@ -35,8 +35,6 @@
             transition: 2s -o-filter linear;
         }
     </style>
-    <tmp>
-    </tmp>
     <body>
         <div id="main" class="window">
             <div id="nav-bar" class="mr d20 screen h2 elevate-4">
@@ -65,8 +63,7 @@
                 </div>
             </div>
             <div class="mr d20 screen h18">
-                <div id="display" class="container small animative">
-                    
+                <div id="display" class="container small animative">  
                 </div>
             </div>
         </div>
@@ -95,7 +92,7 @@
          //*******************************************************************//
 
         function templatingEngineGlobalInitialise(url, initialiseHandler){
-            var templateField = document.getElementsByTagName('tmp')[0];
+            var templateField = document.createElement('DIV');
             fetch(url)
                 .then((response) => response.text())
                 .then((html) => {
@@ -104,11 +101,12 @@
                     var template; for(template of templates)
                         if(template.nodeType == 1)
                             templateCollections[template.id] = template;
-                    document.getElementsByTagName('body')[0].removeChild(templateField);
+                    templateField = null;
                     initialiseHandler();
                 })
                 .catch((error) => {
-                    console.warn(error);
+                    document.getElementsByTagName('body')[0].innerHTML = 
+                        "<h1>Template Files not found, unable to proceed :(</h1>";
                 });
         }
 
@@ -246,7 +244,7 @@
                             .parentElement
                             .dishID;
                     //AJAX Post (userID, dishID, Like)
-                    alert('like:' + dishID);
+                    alert('dislike:' + dishID);
                 }
                 recipeCardsBuffer.push(container);
             }
