@@ -103,7 +103,17 @@ function initialiseNavBar(){
 //Initialise the searchField element
 function createSearchField(){
     var field = utilCreateField(searchField);
+    var searchAlgorithmButton = TE.fetchTemplate('checkListItem');
+    searchAlgorithmButton.classList.add('click-effect');
+    searchAlgorithmButton.children[0].children[0].innerHTML = 'publish';
+    searchAlgorithmButton.children[1].innerHTML = 'Search with Selected Ingredients';
+    searchAlgorithmButton.style.color = '#FFF';
+    searchAlgorithmButton.style.backgroundColor = '#0093A1';
+    searchAlgorithmButton.onclick = function(){
+        recipesButton.onclick();
+    }
     var innerBox = TE.fetchTemplate('innerBox');
+    innerBox.appendChild(searchAlgorithmButton);
     field.appendChild(innerBox);
 }
 
@@ -169,7 +179,7 @@ function createCollapsible(parent, title){
         if(!this.toggle){
             this.toggle = true;
             this.style.color = '#FFF';
-            this.style.backgroundColor = '#00BA8F';
+            this.style.backgroundColor = '#00BDCF';
             this.children[0].children[0].innerHTML = 'keyboard_arrow_down';
             this.associateElement.style.maxHeight = '500vh';
         }else{
@@ -193,7 +203,7 @@ function createCheckListItem(parent, itemName){
         if(!this.checked){
             this.checked = true;
             this.children[0].children[0].innerHTML = 'clear';
-            this.style.backgroundColor = '#00DAA7';
+            this.style.backgroundColor = '#00DEF4';
             this.style.color = '#FFF';
             return;
         }
