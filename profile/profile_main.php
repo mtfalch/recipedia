@@ -14,9 +14,9 @@
     <form method="post">
       <label>Change Password:</label><br>
       <label>Input password</label>
-      <input id="input-password" type="password" /><br>
+      <input id="input-password" type="password" onfocusout="validatePassword()"/><br>
       <label>Input password again</label>
-      <input id="input-password-repeat" type="password" />
+      <input id="input-password-repeat" type="password" onfocusout="validatePassword()"/>
       <button type="button" id="changepw" >Change</button>
     </form>
     <div id="dispinfo"></div>
@@ -46,7 +46,7 @@
       }
 
       button_uploadpic.onclick = function(){
-        
+
         var url = 'uploadpic.php';
         //var file = pic_file.file;
         var formData = 'file='+pic_file.value;
@@ -54,17 +54,18 @@
         AJAXPost(url, formData);
       }
 
-      button_changepw.onclick = function(){
-        if(input_password.value != input_password_repeat.value)
-        {
-            //password_validate_warning.classList.remove('retract');
-            password_valid = false;
-            dispinfo.innerHTML="This password is not correct";
-        }else{
-            password_validate_warning.classList.add('retract');
-            password_valid = true;
-        }
+      function validatePassword(){
+          if(input_password.value != input_password_repeat.value){
+              //password_validate_warning.classList.remove('retract');
+              password_valid = false;
+          }else{
+              //password_validate_warning.classList.add('retract');
+              password_valid = true;
+          }
+      }
 
+      button_changepw.onclick = function(){
+        validatePassword();
         if(password_valid)
         {
           var url = 'changepw.php';
