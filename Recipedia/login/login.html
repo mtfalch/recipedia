@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Receipedia</title>
+	<link rel="stylesheet" type="text/css" href="Min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+    <style>
+        .retract{
+            height: 		0px;
+            padding-top: 	0;
+            padding-bottom: 0;
+            margin-top: 	0;
+            margin-bottom:  0;
+            opacity:  		0;
+        }
+    </style>
+<body>
+        <div class="window" style="background-color: rgb(0, 255, 195)">
+            <div class="container small">
+                <div class="mr d12 screen h4 y3 h-auto border-5 elevate-8 fit" style="background-color: white">
+                        <div class="text-bucket huge align-center mr h-auto" style="background-color: rgb(0, 218, 167)">
+                            Log in to your account
+                        </div>   
+
+                        <div class="mr d12 screen h1">
+                            <div class="mc d12 w1">
+                                <i class="material-icons center" style="color: #777777">person</i>
+                            </div>
+                            <div class="input-bucket mc d12 w10">
+                                <input id="user" name ="user" type="text" class="border-3">
+                            </div>
+                        </div>
+
+                        <div class="mr d12 screen h1">
+                            <div class="mc d12 w1">
+                                <i class="material-icons center" style="color: #777777">lock</i>
+                            </div>
+                            <div class="input-bucket mc d12 w10">
+                                <input id="password" name="password" type="password" class="border-3">
+                            </div>
+                        </div>
+                        <div id="validate-warning" class="list retract" style="background-color: rgb(255, 95, 0); color: white">
+                            <b>Fields are empty!</b>
+                        </div>
+
+                        <div class="mr d12 screen h1">
+                            <div class="mc d12 w3 x1">
+                                <a id="sign_up" class="text-bucket medium center" style="color: rgb(0,218,167);cursor: pointer; " onclick="location.href='../sign_up/sign_up.html'">Sign up</a>
+                            </div>
+                            <div class="mc d12 w3 x4">
+                                <input type="button" id="submit" value ="Submit" onclick="validation()" class="button d12 w12 elevate-5 center animative" style="background-color: rgb(0,218,167); color:rgb(77, 77, 77)">
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+ </body>
+ <script type="text/javascript">
+        function validation()
+        {
+            //action="login.php"
+            var user = document.getElementById("user").value;
+            var password = document.getElementById("password").value;
+
+            //checkValid
+            if(user == "" || password == "")
+            {
+                document.getElementById('validate-warning').innerHTML = "Fields are empty!";
+                document.getElementById("validate-warning").classList.remove('retract');
+                return;
+            }else{
+                document.getElementById("validate-warning").classList.add('retract');
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if(this.readyState == 4 && this.status == 200)
+              {
+                var res = JSON.parse(this.responseText);
+                //alert(this.responseText);
+                //document.getElementById('validate-warning').innerHTML = this.responseText;
+                if(res.status == "success"){
+                    //document.getElementById("validate-warning").classList.add('retract');
+                    location.href = "../mainpage.html";
+                }else{
+                    document.getElementById('validate-warning').innerHTML = "Invalid username or password!"
+                    document.getElementById("validate-warning").classList.remove('retract')
+                }
+                return;
+                //alert(this.responseText);
+              }
+            }
+            var url = 'login.php'
+            xhttp.open('POST', url, true);
+            response = "user=" + document.getElementById("user").value;
+            response = response + "&password=" + document.getElementById("password").value;
+            //alert(response);
+            xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhttp.send(response);
+        }
+ </script>
+ </html>
