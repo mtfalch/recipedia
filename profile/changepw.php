@@ -1,5 +1,4 @@
 <?php
-    echo "hi";
     error_reporting(E_ERROR | E_PARSE);
     $serverName = "localhost";
     $serverUserName = "root";
@@ -15,7 +14,8 @@
     //$sql = "UPDATE users SET password ='".$password."'WHERE userID='".$userID."'";
     mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
 
-    $obj -> status = "SUCCESS";
+    echo "Change password sucessfully!";
+    /*$obj -> status = "Change password sucessfully!";
     $json = json_encode($obj);
-    echo $json;
+    echo $json;?*/
 ?>
