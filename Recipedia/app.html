@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../css/Min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+    <style>
+        .margin{
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .tag{
+            float: left;
+            margin: 2px;
+            padding: 2px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .nav-element{
+            float: right;
+        }
+        .blur{
+            -webkit-filter: blur(30px); 
+            -moz-filter: blur(30px);
+            -o-filter: blur(30px); 
+            -ms-filter: blur(30px); 
+            filter: url(#blur); 
+            filter: blur(30px);  
+            filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');
+            -webkit-transition: 2s -webkit-filter linear;
+            -o-transition: 2s -o-filter linear;
+            transition: 2s -o-filter linear;
+        }
+    </style>
+    <body>
+        <div id="main" class="window">
+            <div id="nav-bar" class="mr d20 screen h2 elevate-4">
+                <div class="media-bucket mc d20 w2">
+                    <img id="user-image">
+                </div>
+                <div id="settings-button" name="nav" href="settings" class="mc d20 w3 nav-element">
+                    <div class="text-bucket medium center">
+                        <b>Settings</b>
+                    </div>
+                </div>
+                <div id="upload-button" name="nav" href="upload" class="mc d20 w3 nav-element">
+                    <div class="text-bucket medium center">
+                        <b>Upload</b>
+                    </div>
+                </div>
+                <div id="search-button" name="nav" href="search" class="mc d20 w3 nav-element">
+                    <div class="text-bucket medium center">
+                        <b>Search</b>
+                    </div>
+                </div>
+                <div id="recipes-button" name="nav" href="recipes" class="mc d20 w3 nav-element">
+                    <div class="text-bucket medium center">
+                        <b>Recipes</b>
+                    </div>
+                </div>
+            </div>
+            <div class="mr d20 screen h18">
+                <div id="display" class="container small animative">  
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="router.js"></script>
+    <script src="templatingEngine.js"></script>
+    <script src="app.js"></script>
+</html>
