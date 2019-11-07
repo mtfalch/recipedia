@@ -119,7 +119,6 @@ function createSearchField(){
     field.appendChild(innerBox);
 
     createCollapsible(searchField.children[0], 'Meat');
-    utilInjectHandlerToNameSelectionSet('tag', function(){}, function(){})
 }
 
 //Initialise the recipeList
@@ -166,6 +165,10 @@ function createRecipeCards(count){
         }
         recipeCardsBuffer.push(container);
     }
+}
+
+function renderCheckList(parent, json){
+
 }
 
 function createCollapsible(parent, title){
