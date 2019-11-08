@@ -4,7 +4,7 @@
     $serverName = "localhost";
     $serverUserName = "root";
     $serverPassword = "";
-    $serverDatabase = "recipedia";
+    $serverDatabase = "menu";
 
     $userID = mysqli_real_escape_string($_POST['userID']);
 
