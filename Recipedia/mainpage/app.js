@@ -15,7 +15,7 @@ var recipeInfoField = document.createElement('DIV');
 var settingsField = document.createElement('DIV');
 
 var recipeCardsBuffer = [];
-//*******************************************************************//
+    //*******************************************************************//
 
 //Create transistion effect for display update
 function refreshDisplayAnimation(refreshHandler){
@@ -52,9 +52,8 @@ function utilInjectHandlerToNameSelectionSet(name, selectedHandler, outsiderHand
 //Universal function for creating a displayContainer
 //fitting field cards for a htmlElement
 function utilCreateField(htmlElement){
-    htmlElement.className = 'mg d15 w14 screen h13 elevate-3 center border-3';
+    htmlElement.className = 'mg d15 w14 screen h13 elevate-3 center';
     htmlElement.style.overflowY = 'scroll';
-    htmlElement.style.backgroundColor = '#FFF';
 
     htmlElement.scrollPosition = 0;
 
@@ -104,21 +103,8 @@ function initialiseNavBar(){
 //Initialise the searchField element
 function createSearchField(){
     var field = utilCreateField(searchField);
-    field.currentTags = [];
-    var searchAlgorithmButton = TE.fetchTemplate('search');
-    searchAlgorithmButton.classList.add('click-effect');
-    searchAlgorithmButton.children[0].children[0].innerHTML = 'publish';
-    searchAlgorithmButton.children[1].innerHTML = 'Search with Selected Ingredients';
-    searchAlgorithmButton.style.color = '#FFF';
-    searchAlgorithmButton.style.backgroundColor = '#00B58B';
-    searchAlgorithmButton.onclick = function(){
-        recipesButton.onclick();
-    }
     var innerBox = TE.fetchTemplate('innerBox');
-    innerBox.appendChild(searchAlgorithmButton);
     field.appendChild(innerBox);
-
-    createCollapsible(searchField.children[0], 'Meat');
 }
 
 //Initialise the recipeList
@@ -144,7 +130,6 @@ function createSettingsField(){
 function createRecipeCards(count){
     var i; for(i = 0; i < count; i++){
         var container = TE.fetchTemplate('recipeCard');
-        container.style.backgroundColor = '#FFF';
         var likeButton = container.children[1].children[1];
         var dislikeButton = container.children[1].children[2];
         likeButton.onclick = function(){
@@ -167,39 +152,7 @@ function createRecipeCards(count){
     }
 }
 
-function renderCheckList(parent, json){
-
-}
-
-function createCollapsible(parent, title){
-    var collapsible = TE.fetchTemplate('collapsible');
-    var toggle = collapsible.children[0];
-    var body = collapsible.children[1];
-    createCheckListItem(body, 'Beef');
-    createCheckListItem(body, 'Chicken');
-    createCheckListItem(body, 'Ham');
-    createCheckListItem(body, 'Salmon');
-    createCheckListItem(body, 'Tuna');
-    
-    toggle.children[1].innerHTML = title;
-    toggle.toggle = false;
-    toggle.associateElement = body;
-    toggle.onclick = function(){
-        if(!this.toggle){
-            this.toggle = true;
-            this.children[0].children[0].innerHTML = 'keyboard_arrow_down';
-            this.associateElement.style.maxHeight = '500vh';
-        }else{
-            this.toggle = false;
-            this.children[0].children[0].innerHTML = 'keyboard_arrow_right';
-            this.associateElement.style.maxHeight = '0px';
-        }
-    }
-
-    parent.appendChild(collapsible);
-}
-
-function createCheckListItem(parent, itemName){
+function createNewSearchCheckListItem(itemName){
     var checkListItem = TE.fetchTemplate('checkListItem');
     checkListItem.itemName = itemName;
     checkListItem.checked = false;
@@ -208,18 +161,16 @@ function createCheckListItem(parent, itemName){
         if(!this.checked){
             this.checked = true;
             this.children[0].children[0].innerHTML = 'clear';
-            this.style.backgroundColor = '#00EDB6';
+            this.style.backgroundColor = '#00DAA7';
             this.style.color = '#FFF';
-            searchField.currentTags.push(this.itemName);
             return;
         }
         this.checked = false;
         this.children[0].children[0].innerHTML = 'add';
-        this.style.backgroundColor = '#EEE';
+        this.style.backgroundColor = '#FFF';
         this.style.color = '#4D4D4D';
-        searchField.currentTags.pop(this.itemName);
     }
-    parent.appendChild(checkListItem);
+    searchField.children[0].appendChild(checkListItem);
 }
 
 function renderRecipeList(recipes, renderCount){
@@ -238,13 +189,6 @@ function renderRecipeList(recipes, renderCount){
 
         var tag; for(tag of recipe.tags)
             utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
-        
-        switch(recipe.like){
-            case 0: break;
-            case 1: bottomBar.children[1].children[0].style.color = '#20E371'; break;
-            case -1: bottomBar.children[2].children[0].style.color = '#FF4D00'; break;
-            default: break;
-        }
 
         recipeList.appendChild(container);
     }
@@ -271,13 +215,13 @@ TE.globalInitialise(
         createRecipeUploadField();
         createSettingsField();
         createRecipeCards(10);
-        routerStart('recipes');
 
         renderRecipeList(
             [
-                {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: 0, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-                {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: -1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-                {dishID: 3, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], like: 1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
+                {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+                {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+                {dishID: 3, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
             ], 3);
+
     }
 );

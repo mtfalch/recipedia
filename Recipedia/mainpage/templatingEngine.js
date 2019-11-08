@@ -9,7 +9,7 @@ var TE = {
                 var templates = templateField.childNodes;
                 var template; for(template of templates)
                     if(template.nodeType == 1)
-                        this.templateCollections[template.getAttribute('template')] = template;
+                        this.templateCollections[template.id] = template;
                 templateField = null;
                 initialiseHandler();
             })
