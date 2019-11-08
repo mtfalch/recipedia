@@ -7,8 +7,6 @@
 	//to prevent mysql injecttion
 	$username= stripcslashes($username);
 	$password= stripcslashes($password);
-	//$username=mysql_real_escape_string($username);
-	//$password=mysql_real_escape_string($password);
 
 	//connect to the server and select database
 	$link=mysqli_connect("localhost", "root", "");
@@ -20,7 +18,6 @@
 	$json -> status = "fail";
 	$row = mysqli_fetch_array($result);
 	if($row['username'] == $username&& $row['password']==$password){
-		//header("Location:mainpage.html");
 		$json -> loggedUser = $username;
 		$json -> status = "success";
 		echo json_encode($json);

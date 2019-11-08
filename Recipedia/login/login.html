@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Receipedia</title>
+	<title>Login</title>
 	<link rel="stylesheet" type="text/css" href="Min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="image/JPG" href="../img/logo.JPG">
 
   <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,7 +36,7 @@
                 <!-- Buttons -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="../mainpage.html">Recipedia</a>
+                        <a class="nav-link" href="../mainpage/mainpage.html">Recipedia</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="profile.html">Profile</a>
@@ -44,7 +45,7 @@
                         <a class="nav-link" href="../sign_up/sign_up.html">Sign up</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="login.html">Login</a>
+                        <a class="nav-link" href="../login/login.html">Login</a>
                     </li>
                 </ul>
 
@@ -100,11 +101,9 @@
  <script type="text/javascript">
         function validation()
         {
-            //action="login.php"
             var user = document.getElementById("user").value;
             var password = document.getElementById("password").value;
 
-            //checkValid
             if(user == "" || password == "")
             {
                 document.getElementById('validate-warning').innerHTML = "Fields are empty!";
@@ -119,24 +118,19 @@
               if(this.readyState == 4 && this.status == 200)
               {
                 var res = JSON.parse(this.responseText);
-                //alert(this.responseText);
-                //document.getElementById('validate-warning').innerHTML = this.responseText;
                 if(res.status == "success"){
-                    //document.getElementById("validate-warning").classList.add('retract');
-                    location.href = "../mainpage.html";
+                    location.href = "../mainpage/app.html";
                 }else{
                     document.getElementById('validate-warning').innerHTML = "Invalid username or password!"
                     document.getElementById("validate-warning").classList.remove('retract')
                 }
                 return;
-                //alert(this.responseText);
               }
             }
             var url = 'login.php'
             xhttp.open('POST', url, true);
             response = "user=" + document.getElementById("user").value;
             response = response + "&password=" + document.getElementById("password").value;
-            //alert(response);
             xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
             xhttp.send(response);
         }
