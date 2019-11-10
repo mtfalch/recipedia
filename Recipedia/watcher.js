@@ -97,8 +97,9 @@
             _pop = Array.prototype.pop,
             _shift = Array.prototype.shift,
             _unshift = Array.prototype.unshift,
-            _slice = Array.prototype.slice,
-            _splice = Array.prototype.splice;
+            _splice = Array.prototype.splice,
+            _sort = Array.prototype.sort,
+            _reverse = Array.prototype.reverse;
         
         function push(arr, w){
             return _push.call(arr, w);
@@ -116,12 +117,16 @@
             return _unshift.call(arr, w);
         }
 
-        function slice(arr, a, b){
-            return _slice.call(arr, a, b);
-        }
-
         function splice(arr, a, b, c, d){
             return _splice.call(arr, a, b, c, d);
+        }
+
+        function sort(arr, w){
+            return _sort.call(arr, w);
+        }
+
+        function reverse(arr){
+            return _reverse.call(arr);
         }
 
         function _inject$Inject(Watcher){
@@ -161,48 +166,52 @@
                 if(!isArray($prop))
                 warn('Cannot inspect non-array property.');
 
-                function _callSetter(Watcher, prop){
-                    if(!Watcher._settings._global_setter_isolation)
-                    Watcher._setter[prop](prop, Watcher[prop]);
-                }
+                var _callSetter = function(prop){
+                    if(!this._settings._global_setter_isolation)
+                    this._setter[prop](prop, this[prop]);
+                }.bind(this, prop);
 
                 var _watcher = this;
                 var proto = $prop.__proto__;
 
                 proto.push = function(w){
                     var $ = push(this, w);
-                    _callSetter(_watcher, prop);
+                    _callSetter();
                     return $;
                 }
 
                 proto.pop = function(){
                     var $ = pop(this);
-                    _callSetter(_watcher, prop);
+                    _callSetter();
                     return $;
                 }
 
                 proto.shift = function(){
                     var $ = shift(this);
-                    _callSetter(_watcher, prop);
+                    _callSetter();
                     return $;
                 }
 
                 proto.unshift = function(w){
                     var $ = unshift(this, w);
-                    _callSetter(_watcher, prop);
-                    return $;
-                }
-
-                proto.slice = function(a, b){
-                    var $ = slice(this, a, b);
-                    _callSetter(_watcher, prop);
+                    _callSetter();
                     return $;
                 }
 
                 proto.splice = function(a, b, c, d){
                     var $ = splice(this, a, b, c, d);
-                    _callSetter(_watcher, prop);
+                    _callSetter();
                     return $;
+                }
+
+                proto.sort = function(w){
+                    sort(this, w);
+                    _callSetter();
+                }
+
+                proto.reverse = function(){
+                    reverse(this);
+                    _callSetter();
                 }
                 
             }
