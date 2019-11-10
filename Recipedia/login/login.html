@@ -1,144 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Receipedia</title>
-	<link rel="stylesheet" type="text/css" href="Min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Receipedia</title>
+    <link rel="stylesheet" type="text/css" href="Min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Optional JavaScipt -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
     <title>Login</title>
 
 </head>
-    <style>
-        .retract{
-            height: 		0px;
-            padding-top: 	0;
-            padding-bottom: 0;
-            margin-top: 	0;
-            margin-bottom:  0;
-            opacity:  		0;
-        }
-    </style>
+<style>
+    .retract {
+        height: 0px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        opacity: 0;
+    }
+</style>
 <body>
-        <!-- Navigation bar -->
-        <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top mx-auto" style="width: 1000px;">
-            <div class="container-fluid">
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top mx-auto" style="width: 1000px;">
+    <div class="container-fluid">
 
-                <!-- Buttons -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../mainpage.html">Recipedia</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.html">Profile</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../sign_up/sign_up.html">Sign up</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                </ul>
+        <!-- Buttons -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="navbar-brand" href="../mainpage.html"><img src="../img/logo.png" height="30" width="100"></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../profile/profile.html">Profile</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="../sign_up/sign_up.html">Sign up</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="login.html">Login</a>
+            </li>
+        </ul>
 
-                <!-- Search function -->
-                <form class="form-inline" action="/some_result.php">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                </form>
+        <!-- Search function -->
+        <form class="form-inline" action="/some_result.php">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<!-- Login box -->
+<div class="window" style="background-color: rgb(255, 255, 255)">
+    <div class="container small">
+        <div class="mr d12 screen h4 y3 h-auto border-5 elevate-8 fit" style="background-color: white">
+            <div class="text-bucket huge align-center mr h-auto" style="background-color: white; color: dimgrey">
+                Login
             </div>
-        </nav>
 
-        <!-- Login box -->
-        <div class="window" style="background-color: rgb(255, 255, 255)">
-            <div class="container small">
-                <div class="mr d12 screen h4 y3 h-auto border-5 elevate-8 fit" style="background-color: white">
-                        <div class="text-bucket huge align-center mr h-auto" style="background-color: white; color: dimgrey">
-                            Login
-                        </div>   
+            <div class="mr d12 screen h1">
+                <div class="mc d12 w1">
+                    <i class="material-icons center" style="color: #777777">person</i>
+                </div>
+                <div class="input-bucket mc d12 w10">
+                    <input id="user" name="user" type="text" class="border-3" style="position: absolute;"
+                           placeholder="Username">
+                </div>
+            </div>
 
-                        <div class="mr d12 screen h1">
-                            <div class="mc d12 w1">
-                                <i class="material-icons center" style="color: #777777">person</i>
-                            </div>
-                            <div class="input-bucket mc d12 w10">
-                                <input id="user" name ="user" type="text" class="border-3" style="position: absolute;" placeholder="Username">
-                            </div>
-                        </div>
+            <div class="mr d12 screen h1">
+                <div class="mc d12 w1">
+                    <i class="material-icons center" style="color: #777777">lock</i>
+                </div>
+                <div class="input-bucket mc d12 w10">
+                    <input id="password" name="password" type="password" class="border-3" style="position: absolute"
+                           placeholder="Password">
+                </div>
+            </div>
+            <div id="validate-warning" class="list retract" style="background-color: rgb(255, 95, 0); color: white">
+                <b>Fields are empty!</b>
+            </div>
 
-                        <div class="mr d12 screen h1">
-                            <div class="mc d12 w1">
-                                <i class="material-icons center" style="color: #777777">lock</i>
-                            </div>
-                            <div class="input-bucket mc d12 w10">
-                                <input id="password" name="password" type="password" class="border-3" style="position: absolute" placeholder="Password">
-                            </div>
-                        </div>
-                        <div id="validate-warning" class="list retract" style="background-color: rgb(255, 95, 0); color: white">
-                            <b>Fields are empty!</b>
-                        </div>
-
-                        <div class="mr d12 screen h1">
-                            <div class="mc d12 w3 x2">
-                                <a id="sign_up" class="text-bucket small" style="color: dimgrey;cursor: pointer; font-size: 14px" onclick="location.href='../sign_up/sign_up.html'"><u>Create a new user</u></a>
-                            </div>
-                            <div class="mc d12 w3 x2">
-                                <input type="button" id="submit" value ="Submit" onclick="validation()" class="button d12 w12 elevate-5 center animative" style="background-color: #28A745; color:rgb(255, 255, 255)">
-                            </div>
-                        </div>
+            <div class="mr d12 screen h1">
+                <div class="mc d12 w3 x2">
+                    <a id="sign_up" class="text-bucket small" style="color: dimgrey;cursor: pointer; font-size: 14px"
+                       onclick="location.href='../sign_up/sign_up.html'"><u>Create a new user</u></a>
+                </div>
+                <div class="mc d12 w3 x2">
+                    <input type="button" id="submit" value="Submit" onclick="validation()"
+                           class="button d12 w12 elevate-5 center animative"
+                           style="background-color: #28A745; color:rgb(255, 255, 255)">
                 </div>
             </div>
         </div>
- </body>
- <script type="text/javascript">
-        function validation()
-        {
-            //action="login.php"
-            var user = document.getElementById("user").value;
-            var password = document.getElementById("password").value;
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function validation() {
+        //action="login.php"
+        var user = document.getElementById("user").value;
+        var password = document.getElementById("password").value;
 
-            //checkValid
-            if(user == "" || password == "")
-            {
-                document.getElementById('validate-warning').innerHTML = "Fields are empty!";
-                document.getElementById("validate-warning").classList.remove('retract');
-                return;
-            }else{
-                document.getElementById("validate-warning").classList.add('retract');
-            }
+        //checkValid
+        if (user == "" || password == "") {
+            document.getElementById('validate-warning').innerHTML = "Fields are empty!";
+            document.getElementById("validate-warning").classList.remove('retract');
+            return;
+        } else {
+            document.getElementById("validate-warning").classList.add('retract');
+        }
 
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-              if(this.readyState == 4 && this.status == 200)
-              {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
                 var res = JSON.parse(this.responseText);
                 //alert(this.responseText);
                 //document.getElementById('validate-warning').innerHTML = this.responseText;
-                if(res.status == "success"){
+                if (res.status == "success") {
                     //document.getElementById("validate-warning").classList.add('retract');
                     location.href = "../mainpage.html";
-                }else{
+                } else {
                     document.getElementById('validate-warning').innerHTML = "Invalid username or password!"
                     document.getElementById("validate-warning").classList.remove('retract')
                 }
                 return;
                 //alert(this.responseText);
-              }
             }
-            var url = 'login.php'
-            xhttp.open('POST', url, true);
-            response = "user=" + document.getElementById("user").value;
-            response = response + "&password=" + document.getElementById("password").value;
-            //alert(response);
-            xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            xhttp.send(response);
         }
- </script>
- </html>
+        var url = 'login.php'
+        xhttp.open('POST', url, true);
+        response = "user=" + document.getElementById("user").value;
+        response = response + "&password=" + document.getElementById("password").value;
+        //alert(response);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(response);
+    }
+</script>
+</html>
