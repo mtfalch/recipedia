@@ -209,6 +209,8 @@
 
             Watcher.prototype.inspect = $inspect;
 
+            $inspect = null;
+
         }
 
         function Watcher(){
