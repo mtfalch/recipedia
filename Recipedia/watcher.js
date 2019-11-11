@@ -1,5 +1,5 @@
 //Watcher.js
-//version: 1.0.2
+//version: 1.0.3
 //Author: Alphaharrius (Harry)
 //Description:  
 //  A utility for creating an object with 
@@ -36,7 +36,7 @@
             console.warn(w);
         }
 
-        function _inject$init(Watcher){
+        function _inject$Init(Watcher){
 
             var $init = function (){
                 Object.defineProperties(
@@ -271,7 +271,39 @@
                 
             }
 
+            var $extract = function(prop){
+
+                if(!has(this, prop))
+                    warn('Cannot extract undefined property.');
+                
+                var $prop = this[prop];
+
+                if(!isObject($prop))
+                    warn('Cannot extract non-object property.');
+
+                return isArray($prop) ? 
+                    (
+                        function(){
+                            var arr = [];
+                            var $sub; for($sub of $prop)
+                                arr.push($sub);
+                            return arr;
+                        }
+                    )() : 
+                    (
+                        function(){
+                            var obj = {};
+                            var key; for(key of _keys.call($prop))
+                                if(has($prop, key))
+                                    obj[key] = $prop[key];
+                            return obj;
+                        }
+                    )();
+
+            }
+
             Watcher.prototype.inspect = $inspect;
+            Watcher.prototype.extract = $extract;
 
         }
 
@@ -282,7 +314,7 @@
             this._init();
         }
 
-        _inject$init(Watcher);
+        _inject$Init(Watcher);
         _inject$Watch(Watcher);
         _inject$Inject(Watcher);
         _inject$Inspect(Watcher);
