@@ -1,5 +1,5 @@
 //Watcher.js
-//version: 1.0.4
+//version: 1.0.5
 //Author: Alphaharrius (Harry)
 //Description:  
 //  A utility for creating an object with 
@@ -257,128 +257,166 @@
                     this._getter[prop](prop, this[prop]);
                 }.bind(this, prop);
 
-                var $observeSubProperty = function(prop, subProp){
-                    var $prop = this[prop];
-                    $prop._val[subProp] = $prop[subProp];
+                // var $observeSubProperty = function(prop, subProp){
+                //     var $prop = this[prop];
+                //     $prop._val[subProp] = $prop[subProp];
+                //     defineProperty(
+                //         $prop, 
+                //         subProp, 
+                //         {
+                //             enumerable : true,
+                //             configurable : true,
+                //             set : function(newVal){
+                //                 var oldVal = $prop._val[subProp];
+                //                 $prop._val[subProp] = newVal;
+                //                 $callSetter();
+                //                 return oldVal;
+                //             },
+                //             get : function(){
+                //                 $callGetter();
+                //                 return $prop._val[subProp];
+                //             }
+                //         }
+                //     );
+
+                // }.bind(this, prop);
+
+                var $observeSubProperties = function($parent, prop){
+                    
+                    var $prop = $parent[prop];
+                    $parent._val[prop] = $parent[prop];
+
                     defineProperty(
-                        $prop, 
-                        subProp, 
+                        $parent, 
+                        prop, 
                         {
                             enumerable : true,
                             configurable : true,
                             set : function(newVal){
-                                var oldVal = $prop._val[subProp];
-                                $prop._val[subProp] = newVal;
+                                var oldVal = $parent._val[prop];
+                                $parent._val[prop] = newVal;
                                 $callSetter();
                                 return oldVal;
                             },
                             get : function(){
                                 $callGetter();
-                                return $prop._val[subProp];
+                                return $parent._val[prop];
                             }
                         }
                     );
-                }.bind(this, prop);
 
-                var subProp; for(subProp of $prop)
-                    if(has($prop, subProp))
-                        $observeSubProperty(subProp);
+                    if(!isObject($prop))
+                        return this;
 
-                if(!isArray($prop))
-                    return this;
-
-                defineProperties(
-                    $prop, 
-                    {
-                        _val : {
+                    defineProperty(
+                        $prop,
+                        '_val',
+                        {
                             enumerable : false,
                             writable : true,
                             value : {}
-                        },
-                        push : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(w){
-                                var $ = push(this, w);
-                                $callSetter();
-                                $observeSubProperty(this.length - 1);
-                                return $;
-                            }
-                        },
-                        pop : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(){
-                                var $ = pop(this);
-                                $callSetter();
-                                return $;
-                            }
-                        },
-                        shift : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(){
-                                var $ = shift(this);
-                                $callSetter();
-                                return $;
-                            }
-                        },
-                        unshift : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(w){
-                                var $ = unshift(this, w);
-                                $callSetter();
-                                return $;
-                            }            
-                        },
-                        splice : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(){
-                                var args = [];
-                                var arg; for(arg of arguments)
-                                    push(args, arg);
-                                var $ = _splice.apply(this, args);
-                                $callSetter();
-                                return $;
-                            }
-                        },
-                        sort : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(w){
-                                sort(this, w);
-                                $callSetter();
-                            }
-                        },
-                        reverse : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(){
-                                reverse(this);
-                                $callSetter();
-                            }
-                        },
-                        add : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(arr){
-                                var e; for(e of arr)
-                                    push(this, e);
-                                $callSetter();
-                                return this.length;
-                            }
-                        },
-                        clear : {
-                            enumerable : false,
-                            writable : true,
-                            value : function(){
-                                this.splice(0, this.length);
-                            }
                         }
+                    );
+
+                    if(isArray($prop))
+                        defineProperties(
+                            $prop, 
+                            {
+                                push : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(w){
+                                        var $ = push(this, w);
+                                        $callSetter();
+                                        $observeSubProperties(this, this.length - 1);
+                                        return $;
+                                    }
+                                },
+                                pop : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(){
+                                        var $ = pop(this);
+                                        $callSetter();
+                                        return $;
+                                    }
+                                },
+                                shift : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(){
+                                        var $ = shift(this);
+                                        $callSetter();
+                                        return $;
+                                    }
+                                },
+                                unshift : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(w){
+                                        var $ = unshift(this, w);
+                                        $callSetter();
+                                        return $;
+                                    }            
+                                },
+                                splice : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(){
+                                        var args = [];
+                                        var arg; for(arg of arguments)
+                                            push(args, arg);
+                                        var $ = _splice.apply(this, args);
+                                        $callSetter();
+                                        return $;
+                                    }
+                                },
+                                sort : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(w){
+                                        sort(this, w);
+                                        $callSetter();
+                                    }
+                                },
+                                reverse : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(){
+                                        reverse(this);
+                                        $callSetter();
+                                    }
+                                },
+                                add : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(arr){
+                                        var e; for(e of arr)
+                                            this.push(e);
+                                        $callSetter();
+                                        return this.length;
+                                    }
+                                },
+                                clear : {
+                                    enumerable : false,
+                                    writable : true,
+                                    value : function(){
+                                        this.splice(0, this.length);
+                                    }
+                                }
+                            }
+                        );
+                    
+                    
+                    var subProp; for(subProp of $keys($prop)){
+                        if(has($prop, subProp))
+                            $observeSubProperties($prop, subProp);
                     }
-                );
+                    
+                }
+
+                $observeSubProperties(this, prop);
+
 
                 return this;
                 
