@@ -279,7 +279,7 @@ TE.globalInitialise(
             function(prop, list){
                 var checkListItems = document.getElementsByName('tag');
                 var checkListItem; for(checkListItem of checkListItems)
-                    if(this.searchCheckList.includes(checkListItem.itemName)){
+                    if(list.includes(checkListItem.itemName)){
                         checkListItem.children[0].children[0].innerHTML = 'clear';
                         checkListItem.style.backgroundColor = '#00EDB6';
                         checkListItem.style.color = '#FFF';
