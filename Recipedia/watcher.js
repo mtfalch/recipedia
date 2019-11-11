@@ -27,10 +27,6 @@
             return _isArray(w);
         }
 
-        function isFunction(w){
-            return w !== null && typeof w === 'function';
-        }
-
         var _hasOwnProperty = Object.prototype.hasOwnProperty;
         function has(w, prop){
             return _hasOwnProperty.call(w, prop);
@@ -40,10 +36,42 @@
             console.warn(w);
         }
 
-        function _inject$Properties(Watcher){
-            Watcher.prototype._val = {};
-            Watcher.prototype._setter = {};
-            Watcher.prototype._getter = {};
+        function _inject$init(Watcher){
+
+            var $init = function (){
+                Object.defineProperties(
+                    this,
+                    {
+                        _val : {
+                            enumerable : false,
+                            writable : true,
+                            value : {}
+                        },
+                        _setter : {
+                            enumerable : false,
+                            writable : true,
+                            value : {}
+                        },
+                        _getter : {
+                            enumerable : false,
+                            writable : true,
+                            value : {}
+                        },
+                        _settings : {
+                            enumerable : true,
+                            writable : true,
+                            value : this._settings = {
+                                _global_setter_isolation : false,
+                                _global_getter_isolation : true
+                            }
+                        }
+                    }
+                );
+                delete this._init;
+            }
+
+            Watcher.prototype._init = $init;
+
         }
 
         function _inject$Watch(Watcher){
@@ -251,13 +279,10 @@
             if(
                 !(this instanceof Watcher)
             ) warn('The constructor of Watcher must be called with the new keyword.');
-            this._settings = {
-                _global_setter_isolation : false,
-                _global_getter_isolation : true
-            }
+            this._init();
         }
 
-        _inject$Properties(Watcher);
+        _inject$init(Watcher);
         _inject$Watch(Watcher);
         _inject$Inject(Watcher);
         _inject$Inspect(Watcher);
