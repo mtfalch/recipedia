@@ -140,7 +140,8 @@
             _unshift = Array.prototype.unshift,
             _splice = Array.prototype.splice,
             _sort = Array.prototype.sort,
-            _reverse = Array.prototype.reverse;
+            _reverse = Array.prototype.reverse,
+            _concat = Array.prototype.concat;
         
         function push(arr, w){
             return _push.call(arr, w);
@@ -197,7 +198,6 @@
         }
 
         function _inject$Inspect(Watcher){
-            
             //Inspect API
             //  [Watcher Object].inspect(PROPERTY_NAME)
             //      This function allows the watcher to watch on
@@ -205,12 +205,19 @@
             //      property within a Watcher Object by, for example
             //      Array.prototype.push, setter of the parent
             //      property will be provoked per mutation.
+            //  [Watcher Object].[Array Property].add(ARRAY)
+            //      This injected method is to add all elements from
+            //      ARRAY to the Array Property of a Watcher Object.
+            //  [Watcher Object].[Array Property].clear()
+            //      This injected method is to clear an array property
+            //      of a Watcher Object, the result property will be a
+            //      empty array with length 0.
             //  [Watcher Object].extract(PROPERTY_NAME)
             //      This function is intended for the extraction of
             //      a defined object / array type property of a Watcher 
             //      Object, all functional property injected by the
             //      Watcher will be filtered.
-
+            
             var $inspect = function(prop){
 
                 if(!has(this, prop))
@@ -294,6 +301,23 @@
                             value : function(){
                                 reverse(this);
                                 _callSetter();
+                            }
+                        },
+                        add : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(arr){
+                                var e; for(e of arr)
+                                    push(this, e);
+                                _callSetter();
+                                return this.length;
+                            }
+                        },
+                        clear : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(){
+                                this.splice(0, this.length);
                             }
                         }
                     }
