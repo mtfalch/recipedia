@@ -73,7 +73,7 @@
                         _settings : {
                             enumerable : true,
                             writable : true,
-                            value : this._settings = {
+                            value : {
                                 _global_setter_isolation : false,
                                 _global_getter_isolation : true
                             }
