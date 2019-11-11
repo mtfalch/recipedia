@@ -29,6 +29,14 @@ function refreshDisplayAnimation(refreshHandler){
     );
 }
 
+function utilArrayToggleValue(arr, val){
+    if(!arr.includes(val)){
+        arr.push(val);
+        return;
+    }
+    arr.splice(arr.indexOf(val), 1);
+}
+
 //This function is used for handling select event of a selection set with common name
 //When the selectedHandler will be applied to the clicked element
 //The outsiderHandler will be applied to the rest of the elements
@@ -205,19 +213,7 @@ function createCheckListItem(parent, itemName){
     checkListItem.checked = false;
     checkListItem.children[1].innerHTML = itemName;
     checkListItem.onclick = function(){
-        if(!this.checked){
-            this.checked = true;
-            this.children[0].children[0].innerHTML = 'clear';
-            this.style.backgroundColor = '#00EDB6';
-            this.style.color = '#FFF';
-            searchField.currentTags.push(this.itemName);
-            return;
-        }
-        this.checked = false;
-        this.children[0].children[0].innerHTML = 'add';
-        this.style.backgroundColor = '#EEE';
-        this.style.color = '#4D4D4D';
-        searchField.currentTags.pop(this.itemName);
+        utilArrayToggleValue(app.searchCheckList, this.itemName);
     }
     parent.appendChild(checkListItem);
 }
@@ -260,6 +256,8 @@ function updateDisplayPage(newPageElement){
     });
 }
 
+var app = new Watcher();
+
 TE.globalInitialise(
     'templates.html', 
     function(){
@@ -272,6 +270,27 @@ TE.globalInitialise(
         createSettingsField();
         createRecipeCards(10);
         routerStart('recipes');
+
+        //Using watcher to create searchField
+        //By setting app.searchCheckList to [] will clear all entries
+        app.watch(
+            'searchCheckList', 
+            [], 
+            function(prop, list){
+                var checkListItems = document.getElementsByName('tag');
+                var checkListItem; for(checkListItem of checkListItems)
+                    if(this.searchCheckList.includes(checkListItem.itemName)){
+                        checkListItem.children[0].children[0].innerHTML = 'clear';
+                        checkListItem.style.backgroundColor = '#00EDB6';
+                        checkListItem.style.color = '#FFF';
+                    }else{
+                        checkListItem.children[0].children[0].innerHTML = 'add';
+                        checkListItem.style.backgroundColor = '#EEE';
+                        checkListItem.style.color = '#4D4D4D';
+                    }
+            }, 
+            null
+        ).inspect('searchCheckList');
 
         renderRecipeList(
             [

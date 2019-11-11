@@ -1,5 +1,5 @@
 //Watcher.js
-//version: 1.0.1
+//version: 1.0.2
 //Author: Alphaharrius (Harry)
 //Description:  
 //  A utility for creating an object with 
@@ -74,6 +74,8 @@
                         }
                     }
                 );
+
+                return this;
             }
 
             var $unwatch = function(prop){
@@ -83,13 +85,12 @@
                 delete this._setter[prop];
                 delete this._getter[prop];
                 delete this[prop];
+
+                return this;
             }
 
             Watcher.prototype.watch = $watch;
             Watcher.prototype.unwatch = $unwatch;
-
-            $watch = null;
-            $unwatch = null;
 
         }
 
@@ -117,10 +118,6 @@
             return _unshift.call(arr, w);
         }
 
-        function splice(arr, a, b, c, d){
-            return _splice.call(arr, a, b, c, d);
-        }
-
         function sort(arr, w){
             return _sort.call(arr, w);
         }
@@ -135,19 +132,20 @@
                 if(!has(this, prop))
                     warn('Cannot inject to undefined property.');
                 this._setter[prop] = setter;
+
+                return this;
             }
 
             var $getter = function(prop, getter){
                 if(!has(this, prop))
                     warn('Cannot inject to undefined property.');
                 this._setter[prop] = getter;
+
+                return this;
             }
 
             Watcher.prototype.setter = $setter;
             Watcher.prototype.getter = $getter;
-
-            $setter = null;
-            $getter = null;
 
         }
 
@@ -164,61 +162,88 @@
                     warn('Cannot inspect non-object property.');
 
                 if(!isArray($prop))
-                warn('Cannot inspect non-array property.');
+                    warn('Cannot inspect non-array property.');
 
                 var _callSetter = function(prop){
                     if(!this._settings._global_setter_isolation)
                     this._setter[prop](prop, this[prop]);
                 }.bind(this, prop);
 
-                var _watcher = this;
-                var proto = $prop.__proto__;
+                Object.defineProperties(
+                    $prop, 
+                    {
+                        push : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(w){
+                                var $ = push(this, w);
+                                _callSetter();
+                                return $;
+                            }
+                        },
+                        pop : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(){
+                                var $ = pop(this);
+                                _callSetter();
+                                return $;
+                            }
+                        },
+                        shift : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(){
+                                var $ = shift(this);
+                                _callSetter();
+                                return $;
+                            }
+                        },
+                        unshift : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(w){
+                                var $ = unshift(this, w);
+                                _callSetter();
+                                return $;
+                            }            
+                        },
+                        splice : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(){
+                                var args = [];
+                                var arg; for(arg of arguments)
+                                    args.push(arg);
+                                var $ = _splice.apply(this, args);
+                                _callSetter();
+                                return $;
+                            }
+                        },
+                        sort : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(w){
+                                sort(this, w);
+                                _callSetter();
+                            }
+                        },
+                        reverse : {
+                            enumerable : false,
+                            writable : true,
+                            value : function(){
+                                reverse(this);
+                                _callSetter();
+                            }
+                        }
+                    }
+                );
 
-                proto.push = function(w){
-                    var $ = push(this, w);
-                    _callSetter();
-                    return $;
-                }
-
-                proto.pop = function(){
-                    var $ = pop(this);
-                    _callSetter();
-                    return $;
-                }
-
-                proto.shift = function(){
-                    var $ = shift(this);
-                    _callSetter();
-                    return $;
-                }
-
-                proto.unshift = function(w){
-                    var $ = unshift(this, w);
-                    _callSetter();
-                    return $;
-                }
-
-                proto.splice = function(a, b, c, d){
-                    var $ = splice(this, a, b, c, d);
-                    _callSetter();
-                    return $;
-                }
-
-                proto.sort = function(w){
-                    sort(this, w);
-                    _callSetter();
-                }
-
-                proto.reverse = function(){
-                    reverse(this);
-                    _callSetter();
-                }
+                return this;
                 
             }
 
             Watcher.prototype.inspect = $inspect;
-
-            $inspect = null;
 
         }
 
