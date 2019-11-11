@@ -20,16 +20,29 @@
             return w !== null && typeof w === 'object';
         }
 
-        var _keys = Object.keys;
-
-        var _isArray = Array.isArray;
-        function isArray(w){
-            return _isArray(w);
+        var $keys = Object.keys;
+        function keys(w){
+            $keys.call(w);
         }
 
-        var _hasOwnProperty = Object.prototype.hasOwnProperty;
+        var $isArray = Array.isArray;
+        function isArray(w){
+            return $isArray(w);
+        }
+
+        var $hasOwnProperty = Object.prototype.hasOwnProperty;
         function has(w, prop){
-            return _hasOwnProperty.call(w, prop);
+            return $hasOwnProperty.call(w, prop);
+        }
+
+        var $defineProperty = Object.defineProperty;
+        function defineProperty($par, prop, $attrib){
+            $defineProperty.call(null, $par, prop, $attrib);
+        }
+
+        var $defineProperties = Object.defineProperties;
+        function defineProperties($par, $props){
+            $defineProperties.call(null, $par, $props);
         }
 
         function warn(w){
@@ -39,7 +52,7 @@
         function _inject$Init(Watcher){
 
             var $init = function (){
-                Object.defineProperties(
+                defineProperties(
                     this,
                     {
                         _val : {
@@ -89,12 +102,18 @@
             //      will be safely removed.
 
             var $watch = function(prop, val, setter, getter){
-                setter = isDef(setter) ? setter : function(){};
-                getter = isDef(getter) ? getter : function(){};
+                setter = 
+                    isDef(setter) ? 
+                        setter : 
+                        function(){};
+                getter = 
+                    isDef(getter) ? 
+                        getter : 
+                        function(){};
                 this._val[prop] = val;
                 this._setter[prop] = setter.bind(this);
                 this._getter[prop] = getter.bind(this);
-                Object.defineProperty(
+                defineProperty(
                     this, 
                     prop, 
                     {
@@ -236,7 +255,7 @@
                     this._setter[prop](prop, this[prop]);
                 }.bind(this, prop);
 
-                Object.defineProperties(
+                defineProperties(
                     $prop, 
                     {
                         push : {
@@ -281,7 +300,7 @@
                             value : function(){
                                 var args = [];
                                 var arg; for(arg of arguments)
-                                    args.push(arg);
+                                    push(args, arg);
                                 var $ = _splice.apply(this, args);
                                 _callSetter();
                                 return $;
@@ -342,14 +361,14 @@
                         function(){
                             var arr = [];
                             var $sub; for($sub of $prop)
-                                arr.push($sub);
+                                push(arr, $sub);
                             return arr;
                         }
                     )() : 
                     (
                         function(){
                             var obj = {};
-                            var key; for(key of _keys.call($prop))
+                            var key; for(key of keys($prop))
                                 if(has($prop, key))
                                     obj[key] = $prop[key];
                             return obj;
@@ -378,5 +397,3 @@
         return Watcher;
     }
 );
-
-
