@@ -76,6 +76,18 @@
 
         function _inject$Watch(Watcher){
 
+            //Watch API
+            //  [Watcher Object].watch(PROPERTY_NAME, PROPERTY_VALUE, SETTER, GETTER)
+            //      This function wraps the feature to insert a new property
+            //      to a Watcher object, the inserted property is being watched
+            //      and the associated setter or getter function will be provoked.
+            //      Any setter and getters with undefined or null type will be
+            //      converted to an empty function automatically
+            //  [Watcher Object].unwatch(PROPERTY_NAME)
+            //      This function wraps a safe deletion action of property of
+            //      a Watcher object, the associated value, setter and getter
+            //      will be safely removed.
+
             var $watch = function(prop, val, setter, getter){
                 setter = isDef(setter) ? setter : function(){};
                 getter = isDef(getter) ? getter : function(){};
@@ -156,6 +168,13 @@
 
         function _inject$Inject(Watcher){
 
+            //Inject API
+            //  [Watcher Object].setter(PROPERTY_NAME, SETTER)
+            //  [Watcher Object].getter(PROPERTY_NAME, GETTER)
+            //      These function wraps the injection of setter or
+            //      getter to a defined property within a Watcher
+            //      object, existing setter or getter will be replaced.
+
             var $setter = function(prop, setter){
                 if(!has(this, prop))
                     warn('Cannot inject to undefined property.');
@@ -178,6 +197,19 @@
         }
 
         function _inject$Inspect(Watcher){
+            
+            //Inspect API
+            //  [Watcher Object].inspect(PROPERTY_NAME)
+            //      This function allows the watcher to watch on
+            //      all object functional mutation of a defined 
+            //      property within a Watcher Object by, for example
+            //      Array.prototype.push, setter of the parent
+            //      property will be provoked per mutation.
+            //  [Watcher Object].extract(PROPERTY_NAME)
+            //      This function is intended for the extraction of
+            //      a defined object / array type property of a Watcher 
+            //      Object, all functional property injected by the
+            //      Watcher will be filtered.
 
             var $inspect = function(prop){
 
