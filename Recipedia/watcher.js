@@ -256,31 +256,7 @@
                     if(!this._settings._global_getter_isolation)
                     this._getter[prop](prop, this[prop]);
                 }.bind(this, prop);
-
-                // var $observeSubProperty = function(prop, subProp){
-                //     var $prop = this[prop];
-                //     $prop._val[subProp] = $prop[subProp];
-                //     defineProperty(
-                //         $prop, 
-                //         subProp, 
-                //         {
-                //             enumerable : true,
-                //             configurable : true,
-                //             set : function(newVal){
-                //                 var oldVal = $prop._val[subProp];
-                //                 $prop._val[subProp] = newVal;
-                //                 $callSetter();
-                //                 return oldVal;
-                //             },
-                //             get : function(){
-                //                 $callGetter();
-                //                 return $prop._val[subProp];
-                //             }
-                //         }
-                //     );
-
-                // }.bind(this, prop);
-
+                
                 var $observeSubProperties = function($parent, prop){
                     
                     var $prop = $parent[prop];
