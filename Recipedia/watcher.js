@@ -1,5 +1,5 @@
 //Watcher.js
-//version: 1.0.3
+//version: 1.0.4
 //Author: Alphaharrius (Harry)
 //Description:  
 //  A utility for creating an object with 
@@ -220,7 +220,7 @@
             //Inspect API
             //  [Watcher Object].inspect(PROPERTY_NAME)
             //      This function allows the watcher to watch on
-            //      all object functional mutation of a defined 
+            //      all functional object mutation of a defined 
             //      property within a Watcher Object by, for example
             //      Array.prototype.push, setter of the parent
             //      property will be provoked per mutation.
@@ -247,23 +247,61 @@
                 if(!isObject($prop))
                     warn('Cannot inspect non-object property.');
 
-                if(!isArray($prop))
-                    warn('Cannot inspect non-array property.');
-
-                var _callSetter = function(prop){
+                var $callSetter = function(prop){
                     if(!this._settings._global_setter_isolation)
                     this._setter[prop](prop, this[prop]);
                 }.bind(this, prop);
 
+                var $callGetter = function(prop){
+                    if(!this._settings._global_getter_isolation)
+                    this._getter[prop](prop, this[prop]);
+                }.bind(this, prop);
+
+                var $observeSubProperty = function(prop, subProp){
+                    var $prop = this[prop];
+                    $prop._val[subProp] = $prop[subProp];
+                    defineProperty(
+                        $prop, 
+                        subProp, 
+                        {
+                            enumerable : true,
+                            configurable : true,
+                            set : function(newVal){
+                                var oldVal = $prop._val[subProp];
+                                $prop._val[subProp] = newVal;
+                                $callSetter();
+                                return oldVal;
+                            },
+                            get : function(){
+                                $callGetter();
+                                return $prop._val[subProp];
+                            }
+                        }
+                    );
+                }.bind(this, prop);
+
+                var subProp; for(subProp of $prop)
+                    if(has($prop, subProp))
+                        $observeSubProperty(subProp);
+
+                if(!isArray($prop))
+                    return this;
+
                 defineProperties(
                     $prop, 
                     {
+                        _val : {
+                            enumerable : false,
+                            writable : true,
+                            value : {}
+                        },
                         push : {
                             enumerable : false,
                             writable : true,
                             value : function(w){
                                 var $ = push(this, w);
-                                _callSetter();
+                                $callSetter();
+                                $observeSubProperty(this.length - 1);
                                 return $;
                             }
                         },
@@ -272,7 +310,7 @@
                             writable : true,
                             value : function(){
                                 var $ = pop(this);
-                                _callSetter();
+                                $callSetter();
                                 return $;
                             }
                         },
@@ -281,7 +319,7 @@
                             writable : true,
                             value : function(){
                                 var $ = shift(this);
-                                _callSetter();
+                                $callSetter();
                                 return $;
                             }
                         },
@@ -290,7 +328,7 @@
                             writable : true,
                             value : function(w){
                                 var $ = unshift(this, w);
-                                _callSetter();
+                                $callSetter();
                                 return $;
                             }            
                         },
@@ -302,7 +340,7 @@
                                 var arg; for(arg of arguments)
                                     push(args, arg);
                                 var $ = _splice.apply(this, args);
-                                _callSetter();
+                                $callSetter();
                                 return $;
                             }
                         },
@@ -311,7 +349,7 @@
                             writable : true,
                             value : function(w){
                                 sort(this, w);
-                                _callSetter();
+                                $callSetter();
                             }
                         },
                         reverse : {
@@ -319,7 +357,7 @@
                             writable : true,
                             value : function(){
                                 reverse(this);
-                                _callSetter();
+                                $callSetter();
                             }
                         },
                         add : {
@@ -328,7 +366,7 @@
                             value : function(arr){
                                 var e; for(e of arr)
                                     push(this, e);
-                                _callSetter();
+                                $callSetter();
                                 return this.length;
                             }
                         },
