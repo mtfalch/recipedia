@@ -22,7 +22,7 @@
 
         var $keys = Object.keys;
         function keys(r){
-            return $keys.call(r);
+            return $keys.call(null, r);
         }
 
         function $spanDiffPatching($element, $template){
@@ -94,7 +94,7 @@
 
             for(i = templateSpanLength - 1; i >= 0; i--){
                 var branch = $elementTree[i];
-                var twig; for(twig of Object.keys(branch)){
+                var twig; for(twig of keys(branch)){
                     var nodeType = $templateSpan[i].nodeType;
                     if(nodeType == 1 || nodeType == 2){
                         $templateSpan[i].appendChild(
