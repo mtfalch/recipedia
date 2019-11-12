@@ -10,16 +10,6 @@
             return r !== null && r !== undefined;
         }
 
-        var $indexOf = Array.prototype.indexOf;
-        var $splice = Array.prototype.splice;
-        function remove(arr, r){
-            return $splice.call(
-                arr, 
-                $indexOf.call(arr, r), 
-                1
-            );
-        }
-
         var $keys = Object.keys;
         function keys(r){
             return $keys.call(null, r);
@@ -120,5 +110,6 @@
         }
 
         global.spanDiffPatching = $spanDiffPatching;
+
     }
 )(this);
