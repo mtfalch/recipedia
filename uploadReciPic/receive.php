@@ -10,6 +10,10 @@
       $in1 = $_POST['in1'];
       $in2 = $_POST['in2'];
       $in3 = $_POST['in3'];
+      $intype1 = $_POST['intype1'];
+      $intype2 = $_POST['intype2'];
+      $intype3 = $_POST['intype3'];
+      $upload_suc = 0;
     //to prevent mysql injecttion
     //$name = stripcslashes($name);
 
@@ -49,16 +53,6 @@
       $newDishID = $row['count(*)'];
     }
     $newDishID++;
-
-    // for ingredients
-    if($in2 == NULL)
-    {
-      $in2 = "NULL";
-    }
-    if($in3 == NULL)
-    {
-      $in3 = "NULL";
-    }
 
     //upload pic
     $target_dir = "web/";
@@ -100,13 +94,15 @@
               else
               {
                   $sql = "insert INTO `dish_info`(`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`, `imgscr`)
-                          VALUES (".$newDishID.",'".$dishname."','".$in1."','".$in2."','".$in3."',0,'aaa','".$target_file."')";
+                          VALUES (".$newDishID.",'".$dishname."','".$in1."','".$in2."','".$in3."',0,'aaa','".$target_file."');";
+
               }
               if (mysqli_query($link,$sql))
               {
                    echo "Uploaded successfully<br>";
+                   $upload_suc = 1;
                    ?>
-                   <img src = '<?php echo $target_file; ?>' style="width:200px; height: 120px; object-fit: cover;">
+                   <img src = '<?php echo $target_file; ?>' style="width:200px; height: 120px; object-fit: cover;"><br>
                    <?php
               }
               else
@@ -119,6 +115,48 @@
         {
             echo "Sorry, there was an error uploading your file.<br>";
         }
+    }
+
+    if($upload_suc == 1)
+    {
+      //insert query to different tables
+      //insert tag_info
+      $sql_tag_info_1 = "insert INTO `tag_info`(`tagName`, `tagType`, `subTag`)
+                        VALUES ('".$in1."','ingredient','".$intype1."')";
+      mysqli_query($link,$sql_tag_info_1);
+
+      if($in2 != NULL)
+      {
+        $sql_tag_info_2 = "insert INTO `tag_info`(`tagName`, `tagType`, `subTag`)
+                          VALUES ('".$in2."','ingredient','".$intype2."')";
+        mysqli_query($link,$sql_tag_info_2);
+      }
+
+      if($in3 != NULL)
+      {
+        $sql_tag_info_3 = "insert INTO `tag_info`(`tagName`, `tagType`, `subTag`)
+                          VALUES ('".$in3."','ingredient','".$intype3.")";
+        mysqli_query($link,$sql_tag_info_3);
+      }
+
+      //insert tag_join_dish
+      $sql_tag_join_dish_1 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in1."',".$newDishID.")";
+      mysqli_query($link,$sql_tag_join_dish_1);
+
+      if($in2 != NULL)
+      {
+        $sql_tag_join_dish_2 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in2."',".$newDishID.")";
+        mysqli_query($link,$sql_tag_join_dish_2);
+      }
+
+      if($in3 != NULL)
+      {
+        $sql_tag_join_dish_3 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in3."',".$newDishID.")";
+        mysqli_query($link,$sql_tag_join_dish_3);
+      }
+      //insert like_list
+      $sql_like_list = "insert INTO `likes_list`(`dishID`, `likes`, `userID`) VALUES (".$newDishID.",0,'aaa')";
+      mysqli_query($link,$sql_like_list);
     }
     ?>
   </body>
