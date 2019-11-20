@@ -55,7 +55,7 @@ function utilCreateField(htmlElement){
     htmlElement.className = 'mg d15 w14 screen h13 elevate-3 center';
     htmlElement.style.overflowY = 'scroll';
 
-    htmlElement.scrollPosition = 0;
+    //htmlElement.scrollPosition = 0;
 
     return htmlElement;
 }
