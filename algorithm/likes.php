@@ -11,7 +11,7 @@
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword, $serverDatabase);
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
-
+    
     //UserID Validation, only a registered user can perform like operations
     $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
 
@@ -43,7 +43,7 @@
                 $sql .= "-";
             $sql .= "$delta where dishID = $dishID";
             $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
-
+            
             $obj->likeStatus = 1;
         }else
             $obj->likeStatus = 0;
@@ -51,5 +51,5 @@
     }else
         $obj->likeStatus = 2;
     echo json_encode($obj);
-
+    exit();
 ?>
