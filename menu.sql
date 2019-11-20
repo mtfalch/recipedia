@@ -2,8 +2,8 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 30, 2019 at 07:30 AM
+-- Host: 127.0.0.1
+-- Generation Time: Nov 08, 2019 at 10:44 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -35,18 +35,21 @@ CREATE TABLE `dish_info` (
   `ingredients2` varchar(30) DEFAULT NULL,
   `ingredients3` varchar(30) DEFAULT NULL,
   `popularity` int(10) NOT NULL DEFAULT 0,
-  `userID` varchar(10) NOT NULL
+  `userID` varchar(64) NOT NULL,
+  `imgscr` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dish_info`
 --
 
-INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`) VALUES
-(1, 'sandwich', 'bread', 'cheese', 'ham', 0, 'aaa'),
-(2, 'saushi', 'rice', 'seaweed', 'fish', 0, 'aaa'),
-(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa'),
-(4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb');
+INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`, `imgscr`) VALUES
+(1, 'sandwich', 'bread', 'cheese', 'ham', 0, 'aaa', ''),
+(2, 'sushi', 'rice', 'seaweed', 'fish', 0, 'aaa', 'web/sushi.jpg'),
+(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa', 'web/spaghetti.jpg'),
+(4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb', ''),
+(5, 'scrambled eggs', 'eggs', 'milk', 'NULL', 0, 'aaa', 'web/Scrambled_eggs.jpg'),
+(6, 'chicken rice', 'chicken ', 'rice', 'NULL', 0, 'aaa', 'web/chickenrice.jpg');
 
 -- --------------------------------------------------------
 
@@ -57,8 +60,19 @@ INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `
 CREATE TABLE `likes_list` (
   `dishID` int(10) NOT NULL,
   `likes` int(10) NOT NULL DEFAULT 0,
-  `userID` varchar(10) NOT NULL
+  `userID` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `likes_list`
+--
+
+INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
+(3, 1, 'aaa'),
+(3, 1, 'meow@cat.com'),
+(3, 1, 'tom898@gmail.com'),
+(4, -1, 'aaa'),
+(4, -1, 'meow@cat.com');
 
 -- --------------------------------------------------------
 
@@ -68,23 +82,24 @@ CREATE TABLE `likes_list` (
 
 CREATE TABLE `tag_info` (
   `tagName` varchar(50) NOT NULL,
-  `tagType` varchar(50) NOT NULL
+  `tagType` varchar(50) NOT NULL,
+  `subTag` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tag_info`
 --
 
-INSERT INTO `tag_info` (`tagName`, `tagType`) VALUES
-('bread', 'ingredient'),
-('cheese', 'ingredient'),
-('fish', 'ingredient'),
-('ham', 'ingredient'),
-('onion', 'ingredient'),
-('rice', 'ingredient'),
-('sausage', 'ingredient'),
-('seaweed', 'ingredient'),
-('spaghetti', 'ingredient');
+INSERT INTO `tag_info` (`tagName`, `tagType`, `subTag`) VALUES
+('bread', 'ingredient', ''),
+('cheese', 'ingredient', ''),
+('fish', 'ingredient', 'meat'),
+('ham', 'ingredient', 'meat'),
+('onion', 'ingredient', 'vegetables'),
+('rice', 'ingredient', ''),
+('sausage', 'ingredient', 'meat'),
+('seaweed', 'ingredient', ''),
+('spaghetti', 'ingredient', '');
 
 -- --------------------------------------------------------
 
@@ -121,17 +136,22 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 --
 
 CREATE TABLE `users` (
-  `userID` varchar(10) NOT NULL,
-  `password` varchar(10) NOT NULL
+  `userID` varchar(64) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `pic` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `password`) VALUES
-('aaa', '111'),
-('bbb', '222');
+INSERT INTO `users` (`userID`, `password`, `pic`) VALUES
+('aaa', '', 'web/cat1.jpg'),
+('bbb', '222', ''),
+('helloworld@gmail.com', 'helloworld123', ''),
+('mary0918@gmail.com', 'cmqgu879', ''),
+('meow@cat.com', 'ilovecat146', ''),
+('tom898@gmail.com', 'seeyou898', '');
 
 --
 -- Indexes for dumped tables
@@ -178,7 +198,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `dish_info`
 --
 ALTER TABLE `dish_info`
-  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

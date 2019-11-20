@@ -4,7 +4,7 @@
     $serverName = "localhost";
     $serverUserName = "root";
     $serverPassword = "";
-    $serverDatabase = "recipedia";
+    $serverDatabase = "menu";
 
     $userID = mysqli_real_escape_string($_POST['userID']);
 
@@ -12,6 +12,7 @@
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
 
+    //UserID Validation, only a registered user can perform like operations
     $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
 
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
@@ -29,14 +30,14 @@
     $obj->userIDValid = "T";
     if(mysqli_num_rows($query) == 1){
         if($rows['likes'] != $like){
-        //likeStatus:
-        //  0: No Change
-        //  1: Change
-        //  2: Error
+            //likeStatus:
+            //  0: No Change
+            //  1: Change
+            //  2: Error
             //increment the popularity of the dish by $like * 3
-            $delta = like * 3;
+            $delta = $like * 3;
             $sql = "UPDATE dish_info set popularity = popularity";
-            if(like > 0)
+            if($like > 0)
                 $sql .= "+";
             else
                 $sql .= "-";

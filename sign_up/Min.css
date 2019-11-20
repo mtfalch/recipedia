@@ -1807,7 +1807,7 @@ body{
 		~
  */
 .animative{
-	transition: 0.5s;
+	transition: all 0.5s;
 }
 .center{
 	position: absolute;
@@ -1868,6 +1868,5 @@ body{
 .border-5{
 	border-radius: 25px;
 }
-
 
 
