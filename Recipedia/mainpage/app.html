@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Welcome</title>
-        <link rel="stylesheet" type="text/css" href="../../css/Min.css">
+        <link rel="stylesheet" type="text/css" href="../css/Min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="icon" type="image/JPG" href="../img/logo.JPG">
     </head>
     <style>
         .margin{
@@ -33,10 +31,16 @@
             -o-transition: 2s -o-filter linear;
             transition: 2s -o-filter linear;
         }
+        .click-effect{
+            transition: 0.1s;
+        }
+        .click-effect:active{
+            opacity: 0.7;
+        }
     </style>
     <body>
-        <div id="main" class="window">
-            <div id="nav-bar" class="mr d20 screen h2 elevate-4">
+        <div id="main" class="window" style="background-color: #EEE;">
+            <div id="nav-bar" class="mr d20 screen h2 elevate-4" style="background-color: white;">
                 <div class="media-bucket mc d20 w2">
                     <img id="user-image">
                 </div>
