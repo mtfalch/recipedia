@@ -3,7 +3,7 @@
   $name = $_POST['find'];
 
   //find the no. of search
-  $no_of_search = 0;
+  $no_of_search = 1;
  ?>
 <html lang="en">
 <head>
@@ -76,7 +76,7 @@
     	       $link = mysqli_connect("localhost", "root", "", "menu");
 
              //gen no. of tagName
-             for ($i = 0; $i < $no_of_search; i++)
+             for ($i = 0; $i < $no_of_search; $i++)
              {
                //need to change $name
                 if($i == 0)
