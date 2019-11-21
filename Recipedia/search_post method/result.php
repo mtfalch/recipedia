@@ -100,17 +100,17 @@
 
               $result = $link->query($que_dish);
 
-              if(!$result) die("<ul>No information related to ".$name."</ul>");
+              if(!$result) die("<ul>No information </ul>");
 
               $result->data_seek(0);
 
-              echo "<ul>The following are the dishes of ".$name. ":<br>";
+              echo "<ul>";
               while($row = $result->fetch_assoc())
               {
-                echo $row['dishName']."<br>";
+                echo "The following are the dishes of ".$row['dishName']. ":<br>";
                 echo "<img src='../".$row['imgscr']."' alt='' style='width:200px; height: 120px; object-fit: cover;'><br>";
-                ?>
-              <?php } ?>
+               }
+           ?>
 
             </ul>
       </div>
