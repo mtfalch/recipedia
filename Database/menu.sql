@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2019 at 10:44 AM
--- Server version: 10.4.6-MariaDB
--- PHP Version: 7.3.9
+-- Generation Time: Nov 21, 2019 at 08:05 AM
+-- Server version: 10.4.8-MariaDB
+-- PHP Version: 7.1.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `menu`
 --
+CREATE DATABASE IF NOT EXISTS `menu` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `menu`;
 
 -- --------------------------------------------------------
 
@@ -28,6 +30,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `dish_info`
 --
 
+DROP TABLE IF EXISTS `dish_info`;
 CREATE TABLE `dish_info` (
   `dishID` int(10) NOT NULL,
   `dishName` varchar(50) NOT NULL,
@@ -48,8 +51,8 @@ INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `
 (2, 'sushi', 'rice', 'seaweed', 'fish', 0, 'aaa', 'web/sushi.jpg'),
 (3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa', 'web/spaghetti.jpg'),
 (4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb', ''),
-(5, 'scrambled eggs', 'eggs', 'milk', 'NULL', 0, 'aaa', 'web/Scrambled_eggs.jpg'),
-(6, 'chicken rice', 'chicken ', 'rice', 'NULL', 0, 'aaa', 'web/chickenrice.jpg');
+(5, 'scrambled eggs', 'eggs', 'milk', NULL, 0, 'aaa', 'web/Scrambled_eggs.jpg'),
+(6, 'chicken rice', 'chicken ', 'rice', '', 0, 'aaa', 'web/chickenrice.jpg');
 
 -- --------------------------------------------------------
 
@@ -57,6 +60,7 @@ INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `
 -- Table structure for table `likes_list`
 --
 
+DROP TABLE IF EXISTS `likes_list`;
 CREATE TABLE `likes_list` (
   `dishID` int(10) NOT NULL,
   `likes` int(10) NOT NULL DEFAULT 0,
@@ -72,7 +76,12 @@ INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
 (3, 1, 'meow@cat.com'),
 (3, 1, 'tom898@gmail.com'),
 (4, -1, 'aaa'),
-(4, -1, 'meow@cat.com');
+(4, -1, 'meow@cat.com'),
+(1, 0, 'test@recipedia.com'),
+(2, 0, 'test@recipedia.com'),
+(3, 0, 'test@recipedia.com'),
+(5, 0, 'test@recipedia.com'),
+(6, 0, 'test@recipedia.com');
 
 -- --------------------------------------------------------
 
@@ -80,6 +89,7 @@ INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
 -- Table structure for table `tag_info`
 --
 
+DROP TABLE IF EXISTS `tag_info`;
 CREATE TABLE `tag_info` (
   `tagName` varchar(50) NOT NULL,
   `tagType` varchar(50) NOT NULL,
@@ -93,8 +103,11 @@ CREATE TABLE `tag_info` (
 INSERT INTO `tag_info` (`tagName`, `tagType`, `subTag`) VALUES
 ('bread', 'ingredient', ''),
 ('cheese', 'ingredient', ''),
+('chicken', 'ingredient', 'meat'),
+('eggs', 'ingredient', ''),
 ('fish', 'ingredient', 'meat'),
 ('ham', 'ingredient', 'meat'),
+('milk', 'ingredient', ''),
 ('onion', 'ingredient', 'vegetables'),
 ('rice', 'ingredient', ''),
 ('sausage', 'ingredient', 'meat'),
@@ -107,6 +120,7 @@ INSERT INTO `tag_info` (`tagName`, `tagType`, `subTag`) VALUES
 -- Table structure for table `tag_join_dish`
 --
 
+DROP TABLE IF EXISTS `tag_join_dish`;
 CREATE TABLE `tag_join_dish` (
   `tagName` varchar(50) NOT NULL,
   `dishID` int(10) NOT NULL
@@ -127,7 +141,11 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 ('onion', 3),
 ('sausage', 3),
 ('spaghetti', 3),
-('sausage', 4);
+('sausage', 4),
+('eggs', 5),
+('milk', 5),
+('chicken', 6),
+('rice', 6);
 
 -- --------------------------------------------------------
 
@@ -135,6 +153,7 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `userID` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
@@ -151,6 +170,7 @@ INSERT INTO `users` (`userID`, `password`, `pic`) VALUES
 ('helloworld@gmail.com', 'helloworld123', ''),
 ('mary0918@gmail.com', 'cmqgu879', ''),
 ('meow@cat.com', 'ilovecat146', ''),
+('test@recipedia.com', 'test1234', ''),
 ('tom898@gmail.com', 'seeyou898', '');
 
 --
