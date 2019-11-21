@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2019 at 10:44 AM
+-- Generation Time: Nov 01, 2019 at 09:28 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -35,21 +35,18 @@ CREATE TABLE `dish_info` (
   `ingredients2` varchar(30) DEFAULT NULL,
   `ingredients3` varchar(30) DEFAULT NULL,
   `popularity` int(10) NOT NULL DEFAULT 0,
-  `userID` varchar(64) NOT NULL,
-  `imgscr` varchar(45) NOT NULL
+  `userID` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dish_info`
 --
 
-INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`, `imgscr`) VALUES
-(1, 'sandwich', 'bread', 'cheese', 'ham', 0, 'aaa', ''),
-(2, 'sushi', 'rice', 'seaweed', 'fish', 0, 'aaa', 'web/sushi.jpg'),
-(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa', 'web/spaghetti.jpg'),
-(4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb', ''),
-(5, 'scrambled eggs', 'eggs', 'milk', 'NULL', 0, 'aaa', 'web/Scrambled_eggs.jpg'),
-(6, 'chicken rice', 'chicken ', 'rice', 'NULL', 0, 'aaa', 'web/chickenrice.jpg');
+INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`) VALUES
+(1, 'sandwich', 'bread', 'cheese', 'ham', 0, 'aaa'),
+(2, 'saushi', 'rice', 'seaweed', 'fish', 0, 'aaa'),
+(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa'),
+(4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb');
 
 -- --------------------------------------------------------
 
@@ -60,19 +57,8 @@ INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `
 CREATE TABLE `likes_list` (
   `dishID` int(10) NOT NULL,
   `likes` int(10) NOT NULL DEFAULT 0,
-  `userID` varchar(64) NOT NULL
+  `userID` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `likes_list`
---
-
-INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
-(3, 1, 'aaa'),
-(3, 1, 'meow@cat.com'),
-(3, 1, 'tom898@gmail.com'),
-(4, -1, 'aaa'),
-(4, -1, 'meow@cat.com');
 
 -- --------------------------------------------------------
 
@@ -82,24 +68,23 @@ INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
 
 CREATE TABLE `tag_info` (
   `tagName` varchar(50) NOT NULL,
-  `tagType` varchar(50) NOT NULL,
-  `subTag` varchar(32) NOT NULL
+  `tagType` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tag_info`
 --
 
-INSERT INTO `tag_info` (`tagName`, `tagType`, `subTag`) VALUES
-('bread', 'ingredient', ''),
-('cheese', 'ingredient', ''),
-('fish', 'ingredient', 'meat'),
-('ham', 'ingredient', 'meat'),
-('onion', 'ingredient', 'vegetables'),
-('rice', 'ingredient', ''),
-('sausage', 'ingredient', 'meat'),
-('seaweed', 'ingredient', ''),
-('spaghetti', 'ingredient', '');
+INSERT INTO `tag_info` (`tagName`, `tagType`) VALUES
+('bread', 'ingredient'),
+('cheese', 'ingredient'),
+('fish', 'ingredient'),
+('ham', 'ingredient'),
+('onion', 'ingredient'),
+('rice', 'ingredient'),
+('sausage', 'ingredient'),
+('seaweed', 'ingredient'),
+('spaghetti', 'ingredient');
 
 -- --------------------------------------------------------
 
@@ -146,7 +131,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `password`, `pic`) VALUES
-('aaa', '', 'web/cat1.jpg'),
+('aaa', '111', 'web/cat1.jpg'),
 ('bbb', '222', ''),
 ('helloworld@gmail.com', 'helloworld123', ''),
 ('mary0918@gmail.com', 'cmqgu879', ''),
@@ -198,7 +183,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `dish_info`
 --
 ALTER TABLE `dish_info`
-  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

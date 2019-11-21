@@ -5,6 +5,10 @@
   </head>
   <body>
     <?php
+    //$name = $_POST['user'];
+    //$pwd = $_POST['password'];
+    //to prevent mysql injecttion
+    //$name = stripcslashes($name);
     $target_dir = "web/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
