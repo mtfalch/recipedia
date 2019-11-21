@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
-  $name = $_POST['find'];
-
+  $name[0] = $_POST['find'];
+  $name[1] = 'bread';
   //find the no. of search
   $no_of_search = 1;
  ?>
@@ -81,11 +81,11 @@
                //need to change $name
                 if($i == 0)
                 {
-                  $tagName = "`tag_join_dish`.tagName  = '".$name."'";
+                  $tagName = "`tag_join_dish`.tagName  = '".$name[0]."'";
                 }
                 //need to change $name
                 else {
-                  $tagName += " or `tag_join_dish`.tagName  = '".$name."'";
+                  $tagName += " or `tag_join_dish`.tagName  = '".$name[$i]."'";
                 }
              }
 
