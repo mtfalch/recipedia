@@ -136,24 +136,16 @@ function createRecipeList(){
     recipeList.scrollPosition = 0;
 }
 
-//Upload Recipe function
 function createRecipeUploadField(){
     var field = utilCreateField(recipeUploadField);
-    var upload = TE.fetchTemplate('upload');
-    recipeUploadField.appendChild(upload);
 }
-
 
 function createRecipeInfoField(){
     var field = utilCreateField(recipeInfoField);
-    
 }
 
-//Setting function
 function createSettingsField(){
     var field = utilCreateField(settingsField);
-    var setting = TE.fetchTemplate('setting');
-    settingsField.appendChild(setting);
 }
 
 //Add a new recipe element to the recipeListBuffer
@@ -227,7 +219,7 @@ function createCheckListItem(parent, itemName){
 }
 
 function renderRecipeList(recipes, renderCount){
-    recipeList.innerHTML = "";
+    var renderBuffer = [];
     var i; for(i = 0; i < renderCount; i++){
         var recipe = recipes[i];
         var container = recipeCardsBuffer[i];
@@ -240,18 +232,28 @@ function renderRecipeList(recipes, renderCount){
 
         imageField.children[0].children[0].src = recipe.imgUrl ? recipe.imgUrl : '';
 
+        tagBar.children[0].innerHTML = '';
+
         var tag; for(tag of recipe.tags)
             utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
         
         switch(recipe.like){
             case 0: break;
-            case 1: bottomBar.children[1].children[0].style.color = '#20E371'; break;
-            case -1: bottomBar.children[2].children[0].style.color = '#FF4D00'; break;
+            case 1: 
+                bottomBar.children[1].children[0].style.color = '#20E371'; 
+                bottomBar.children[2].children[0].style.color = '#BBB';
+                break;
+            case -1: 
+                bottomBar.children[2].children[0].style.color = '#FF4D00'; 
+                bottomBar.children[1].children[0].style.color = '#BBB';
+                break;
             default: break;
         }
-
-        recipeList.appendChild(container);
+        renderBuffer.push(container);
     }
+    recipeList.innerHTML = '';
+    for(var elem of renderBuffer)
+        recipeList.appendChild(elem);
 }
 
 function updateDisplayPage(newPageElement){
@@ -263,7 +265,6 @@ function updateDisplayPage(newPageElement){
         newPageElement.scrollTop = newPageElement.scrollPosition;
     });
 }
-
 
 var app = new Watcher();
 
@@ -284,7 +285,10 @@ TE.globalInitialise(
         //By setting app.searchCheckList to [] will clear all entries
         //Using Watcher to buffer recipe cards rendering
         //Any change to app.recipes will be rendered immediately
-        app.watch('searchCheckList', [], 
+        app
+        .watch(
+            'searchCheckList', 
+            [], 
             function(prop, list){
                 var checkListItems = document.getElementsByName('tag');
                 var checkListItem; for(checkListItem of checkListItems)
@@ -301,7 +305,9 @@ TE.globalInitialise(
             null
         )
         .inspect('searchCheckList')
-        .watch('recipes',[],
+        .watch(
+            'recipes',
+            [],
             function(prop, list){
                 renderRecipeList(list, list.length);
             }

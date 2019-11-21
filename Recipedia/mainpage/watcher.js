@@ -249,14 +249,14 @@
 
                 var $callSetter = function(prop){
                     if(!this._settings._global_setter_isolation)
-                    this._setter[prop](prop, this[prop]);
+                        this._setter[prop](prop, this[prop]);
                 }.bind(this, prop);
 
                 var $callGetter = function(prop){
                     if(!this._settings._global_getter_isolation)
-                    this._getter[prop](prop, this[prop]);
+                        this._getter[prop](prop, this[prop]);
                 }.bind(this, prop);
-                
+
                 var $observeSubProperties = function($parent, prop){
                     
                     var $prop = $parent[prop];
@@ -284,13 +284,14 @@
                     if(!isObject($prop))
                         return this;
 
-                    defineProperty(
+                    defineProperties(
                         $prop,
-                        '_val',
                         {
-                            enumerable : false,
-                            writable : true,
-                            value : {}
+                            _val : {
+                                enumerable : false,
+                                writable : true,
+                                value : {}
+                            }
                         }
                     );
 
@@ -382,8 +383,7 @@
                                 }
                             }
                         );
-                    
-                    
+
                     var subProp; for(subProp of $keys($prop)){
                         if(has($prop, subProp))
                             $observeSubProperties($prop, subProp);
@@ -391,7 +391,7 @@
                     
                 }
 
-                $observeSubProperties(this, prop);
+                $observeSubProperties(this, prop, []);
 
 
                 return this;
