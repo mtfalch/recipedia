@@ -12,16 +12,16 @@
 
 	//connect to the server and select database
 	$link=mysqli_connect("localhost", "root", "");
-	mysqli_select_db($link,"login");
+	mysqli_select_db($link,"menu");
 
 	//Query the database for user
-	$result=mysqli_query($link,"select * from users where username = '$username' and password = '$password' ")or die("Failed to query database".mysql_error());
+	$result=mysqli_query($link,"select * from users where userID = '$username' and password = '$password' ")or die("Failed to query database".mysql_error());
 	$json -> status = "fail";
 
 	//if cookie set before
 	//Query
 	$row = mysqli_fetch_array($result);
-	if($row['username'] == $username&& $row['password']==$password){
+	if($row['userID'] == $username&& $row['password']==$password){
 				$json -> loggedUser = $username;
 				$json -> status = "success";
 				echo json_encode($json);

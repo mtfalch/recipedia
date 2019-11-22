@@ -5,12 +5,12 @@
     $serverPassword = "";
 
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
-    mysqli_select_db($con, "login");
+    mysqli_select_db($con, "menu");
 
     $userID = $_POST["email"];
     $password = $_POST["password"];
 
-    $sql = "INSERT into users (username, password) values ('$userID','$password')";
+    $sql = "INSERT into users (userID,password,pic) values ('$userID','$password','')";
     mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
 
     $obj -> status = "SUCCESS";

@@ -128,10 +128,10 @@
         function AJAXPost(url, formData, onReadyStateHandler){
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
-                if(this.readyState == 4 && this.status == 200)
-                    onReadyStateHandler(
-                        JSON.parse(this.responseText)
-                    )
+                if(this.readyState == 4 && this.status == 200){
+                    onReadyStateHandler(JSON.parse(this.responseText));
+                    location.href = "../mainpage/app.html";
+                }  
             }
             xhr.open('POST', url, true);
             xhr.send(formData);
@@ -141,7 +141,7 @@
             var formData = new FormData();
             formData.append('email', input_email.value);
             AJAXPost(
-                'http://localhost/validate_email.php',
+                'http://localhost/Miniproject/Recipedia/sign_up/validate_email.php',
                 formData,
                 function(response){
                     console.log(response)
@@ -189,14 +189,12 @@
             formData.append('email', input_email.value);
             formData.append('password', input_password.value);
             AJAXPost(
-                'http://localhost/sign_up.php',
+                'http://localhost/Miniproject/Recipedia/sign_up/sign_up.php',
                 formData,
                 function(response){
                     console.log(response);
                 }
             )
-        }
-        
-
+        }        
     </script>
 </html>

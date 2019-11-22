@@ -135,3 +135,58 @@
         class="text-bucket medium v-center d15 x2">
     </div>
 </div>
+
+<!-- Setting html -->
+<div template="setting" class="container-fluid" style="width: 100%">
+
+    <div align="center"><img alt="User Pic" style="width: 50%; height: 50%; margin-top: 70px"
+                             src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
+                             id="profile-image1" class="img-circle img-responsive">
+        <br>
+        <br>
+        
+        <!-- /input-group -->
+    </div>
+    <div class="col-sm-6">
+        <h4 style="color:#00b1b1;"> Name of Person </h4></span>
+        <span><p>Title</p></span>
+    </div>
+    <div class="clearfix"></div>
+    <hr style="margin:5px 0 5px 0;">
+    <div class="col-sm-5 col-xs-6 tital ">Info</div>
+    <div class="col-sm-7 col-xs-6 ">Info</div>
+    <div class="clearfix"></div>
+    <div class="bot-border"></div>
+</div>
+
+<!-- Upload  html -->
+<div template="upload" class="container-fluid" style="width: 100%">
+<div class="col-sm-6">
+    <br>
+    <h1>Upload your recipe</h1><hr>
+        <form  method="POST"  target="_blank">
+            <div class="form-group">
+                <label for="dish_name" required="required">Dish name</label>
+                <input type="text" name="dish_namei" class="form-control" id="dish_name" placeholder="Dish Name">
+            </div></br>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Dish Category</label>
+                <select class="form-control" id="exampleFormControlSelect1" name="platform" required="required">
+                    <option>Breakfast</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+            <label class="mr-2">Upload Dish picture:</label>
+            <input type="file" name="file">
+            </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
