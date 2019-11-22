@@ -134,6 +134,7 @@ function createRecipeList(){
     recipeList.classList.add('mg');
     recipeList.style.overflowY = 'scroll';
     recipeList.scrollPosition = 0;
+    listInit(recipeList, 10);
 }
 
 function createRecipeUploadField(){
@@ -149,31 +150,31 @@ function createSettingsField(){
 }
 
 //Add a new recipe element to the recipeListBuffer
-function createRecipeCards(count){
-    var i; for(i = 0; i < count; i++){
-        var container = TE.fetchTemplate('recipeCard');
-        container.style.backgroundColor = '#FFF';
-        var likeButton = container.children[1].children[1];
-        var dislikeButton = container.children[1].children[2];
-        likeButton.onclick = function(){
-            var dishID  = 
-                this.parentElement
-                    .parentElement
-                    .dishID;
-            //AJAX Post (userID, dishID, Like)
-            alert('like:' + dishID);
-        }
-        dislikeButton.onclick = function(){
-            var dishID  = 
-                this.parentElement
-                    .parentElement
-                    .dishID;
-            //AJAX Post (userID, dishID, Like)
-            alert('dislike:' + dishID);
-        }
-        recipeCardsBuffer.push(container);
-    }
-}
+// function createRecipeCards(count){
+//     var i; for(i = 0; i < count; i++){
+//         var container = TE.fetchTemplate('recipeCard');
+//         container.style.backgroundColor = '#FFF';
+//         var likeButton = container.children[1].children[1];
+//         var dislikeButton = container.children[1].children[2];
+//         likeButton.onclick = function(){
+//             var dishID  = 
+//                 this.parentElement
+//                     .parentElement
+//                     .dishID;
+//             //AJAX Post (userID, dishID, Like)
+//             alert('like:' + dishID);
+//         }
+//         dislikeButton.onclick = function(){
+//             var dishID  = 
+//                 this.parentElement
+//                     .parentElement
+//                     .dishID;
+//             //AJAX Post (userID, dishID, Like)
+//             alert('dislike:' + dishID);
+//         }
+//         recipeCardsBuffer.push(container);
+//     }
+// }
 
 function renderCheckList(parent, json){
 
@@ -218,43 +219,46 @@ function createCheckListItem(parent, itemName){
     parent.appendChild(checkListItem);
 }
 
-function renderRecipeList(recipes, renderCount){
-    var renderBuffer = [];
-    var i; for(i = 0; i < renderCount; i++){
-        var recipe = recipes[i];
-        var container = recipeCardsBuffer[i];
-        container.dishID = recipe.dishID;
-        var imageField = container.children[0];
-        var bottomBar = container.children[1];
-        var tagBar = container.children[2];
-        var titleTextField = bottomBar.children[0].children[0];
-        titleTextField.innerHTML = recipe.title;
+// function renderRecipeList(recipes, renderCount){
+//     var t1 = performance.now();
+//     var renderBuffer = [];
+//     var i; for(i = 0; i < renderCount; i++){
+//         var recipe = recipes[i];
+//         var container = recipeCardsBuffer[i];
+//         container.dishID = recipe.dishID;
+//         var imageField = container.children[0];
+//         var bottomBar = container.children[1];
+//         var tagBar = container.children[2];
+//         var titleTextField = bottomBar.children[0].children[0];
+//         titleTextField.innerHTML = recipe.title;
 
-        imageField.children[0].children[0].src = recipe.imgUrl ? recipe.imgUrl : '';
+//         imageField.children[0].children[0].src = recipe.imgUrl ? recipe.imgUrl : '';
 
-        tagBar.children[0].innerHTML = '';
+//         tagBar.children[0].innerHTML = '';
 
-        var tag; for(tag of recipe.tags)
-            utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
+//         var tag; for(tag of recipe.tags)
+//             utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
         
-        switch(recipe.like){
-            case 0: break;
-            case 1: 
-                bottomBar.children[1].children[0].style.color = '#20E371'; 
-                bottomBar.children[2].children[0].style.color = '#BBB';
-                break;
-            case -1: 
-                bottomBar.children[2].children[0].style.color = '#FF4D00'; 
-                bottomBar.children[1].children[0].style.color = '#BBB';
-                break;
-            default: break;
-        }
-        renderBuffer.push(container);
-    }
-    recipeList.innerHTML = '';
-    for(var elem of renderBuffer)
-        recipeList.appendChild(elem);
-}
+//         switch(recipe.like){
+//             case 0: break;
+//             case 1: 
+//                 bottomBar.children[1].children[0].style.color = '#20E371'; 
+//                 bottomBar.children[2].children[0].style.color = '#BBB';
+//                 break;
+//             case -1: 
+//                 bottomBar.children[2].children[0].style.color = '#FF4D00'; 
+//                 bottomBar.children[1].children[0].style.color = '#BBB';
+//                 break;
+//             default: break;
+//         }
+//         renderBuffer.push(container);
+//     }
+//     recipeList.innerHTML = '';
+//     for(var elem of renderBuffer)
+//         recipeList.appendChild(elem);
+//     var t2 = performance.now();
+//     console.log(t2 - t1);
+// }
 
 function updateDisplayPage(newPageElement){
     refreshDisplayAnimation(function(){
@@ -278,7 +282,6 @@ TE.globalInitialise(
         createRecipeInfoField();
         createRecipeUploadField();
         createSettingsField();
-        createRecipeCards(10);
         routerStart('recipes');
 
         //Using watcher to create searchField
@@ -309,15 +312,15 @@ TE.globalInitialise(
             'recipes',
             [],
             function(prop, list){
-                renderRecipeList(list, list.length);
+                renderList(list, 10);
             }
         )
         .inspect('recipes');
 
         app.recipes.add([
-            {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: 0, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-            {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: -1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-            {dishID: 2, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], like: 1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
+            {dishID: 3, title: "Scrambled Eggs", like: 1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+            {dishID: 1, title: "Scrambled Eggs", like: -1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+            {dishID: 2, title: "Scrambled Eggs", like: 0, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
         ]);
 
     }

@@ -174,7 +174,7 @@
                 $prop : $properties,
                 parent : VNODE_INDEX_HOST,
                 $children : [],
-                $descendant : []
+                $descendant : [],
             };
             this._createNodeTrace(vnode);
             return vnode;
@@ -374,6 +374,15 @@
                     node = nodes[i];
                     $aNode = $aDOM[node];
                     $bNode = $bDOM[node];
+
+                    //These code below requires a rewrite...
+                    //If node is not text node, check attributes
+                    //The fix is to change text into an attribute
+                    //So the flow of the below code can be converted to:
+                    //  1.  Iterative check on attributes of each node
+                    //  2.  If node doesn't exist on bDOM, 
+                    //      or node is a text node,
+                    //      skip children checkings
 
                     //Check for attributes mutation or change,
                     //This method is not final, remain for beta stage
