@@ -15,41 +15,62 @@
     //UserID Validation, only a registered user can perform like operations
     $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
 
+    //Predefine valid to false
+    $object -> valid = 'F';
+
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
+    echo mysqli_fetch_array($query)['cnt'];
+    exit();
     if(mysqli_fetch_array($query)['cnt'] != 1){
-        $obj->userIDValid = "F";
-        echo json_encode($obj);
+        // $object -> res = mysqli_fetch_array($query)['cnt'];
+        // echo json_encode($object);
         exit();
     }
 
+    //Usser validated, set valid to true
+    $object -> valid = 'T';
+
+    //Fetch dishID and like from POST for processing
     $dishID = $_POST['dishID'];
     $like = (int) $_POST['like'];
+
     $sql = "SELECT likes from likes_list where userID = '$userID' and dishID = '$dishID'";
     $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
     $rows = mysqli_fetch_array($query);
-    $obj->userIDValid = "T";
+
+    //Initialise currentLike
+    $currentLike = 0;
+
     if(mysqli_num_rows($query) == 1){
-        if($rows['likes'] != $like){
-            //likeStatus:
-            //  0: No Change
-            //  1: Change
-            //  2: Error
-            //increment the popularity of the dish by $like * 3
-            $delta = $like * 3;
-            $sql = "UPDATE dish_info set popularity = popularity";
-            if($like > 0)
-                $sql .= "+";
-            else
-                $sql .= "-";
-            $sql .= "$delta where dishID = $dishID";
-            $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
-            
-            $obj->likeStatus = 1;
-        }else
-            $obj->likeStatus = 0;
-        exit();
-    }else
-        $obj->likeStatus = 2;
-    echo json_encode($obj);
+        //When user already have liked or disliked
+        $previousLike = $rows['likes'];
+        $currentLike = $previousLike;
+        if($like != $previousLike)
+            $currentLike += $like * 3;
+
+    }else{
+        
+        $currentLike = $like;
+        $sql = "INSERT into likes_list (userID, dishID, likes) values ($userID, $dishID, $currentLike)";
+        $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
+
+    }
+
+    if($currentLike = 0){
+
+        $sql = "DELETE from likes_list where userID = '$userID' and dishID = '$dishID";
+        $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
+        $object -> status = $currentLike;
+
+    }else{
+
+        $sql = "UPDATE likes_list set likes = $currentLike where userID = '$userID' and dishID = '$dishID";
+        $query = mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
+        $object -> status = $currentLike / 3;
+
+    }
+
+    echo json_encode($object);
+
     exit();
 ?>

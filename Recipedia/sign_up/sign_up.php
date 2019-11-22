@@ -3,9 +3,9 @@
     $serverName = "localhost";
     $serverUserName = "root";
     $serverPassword = "";
+    $serverDatabase = "menu";
 
-    $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
-    mysqli_select_db($con, "login");
+    $con = mysqli_connect($serverName, $serverUserName, $serverPassword, $serverDatabase);
 
     $userID = $_POST["email"];
     $password = $_POST["password"];
