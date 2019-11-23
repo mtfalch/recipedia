@@ -525,7 +525,7 @@
 
     function injectRenderMethods(MinVDOM){
 
-        function $$render$ParallelShallow(targets){
+        function $$render$ParalellShallow(targets){
 
             var t1 = performance.now();
 
@@ -752,7 +752,7 @@
 
         }
 
-        MinVDOM.prototype.render = $$render$ParallelShallow;
+        MinVDOM.prototype.render = $$render$ParalellShallow;
 
     }
 
