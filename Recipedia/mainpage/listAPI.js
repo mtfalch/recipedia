@@ -61,7 +61,12 @@ function listInit(listElement, listCount){
         var likeIcon = vdom.vnode('i',
             {
                 class : 'material-icons center',
-                style : 'font-size: 36px; color: #BBB; cursor: pointer;'
+                $style : {
+                    fontSize : '36px',
+                    color : '#BBB',
+                    cursor : 'pointer',
+                    transition : '0.5s'
+                }
             },
             {
                 dishID : -1,
@@ -82,6 +87,7 @@ function listInit(listElement, listCount){
                             if(data.status == 'F')
                                 return console.warn('[Like]: Error! Unable to like...');
                             app.recipes[cardLocation].like = data.status;
+                            renderList(app.extract('recipes'), 10);
                         }
                     );
                 }
@@ -97,7 +103,12 @@ function listInit(listElement, listCount){
         var dislikeIcon = vdom.vnode('i',
             {
                 class : 'material-icons center',
-                style : 'font-size: 36px; color: #BBB; cursor: pointer;'
+                $style : {
+                    fontSize : '36px',
+                    color : '#BBB',
+                    cursor : 'pointer',
+                    transition : '0.5s',
+                }
             },
             {
                 dishID : -1,
@@ -118,6 +129,7 @@ function listInit(listElement, listCount){
                             if(data.status == 'F')
                                 return console.warn('[Dislike]: Error! Unable to dislike...');
                             app.recipes[cardLocation].like = data.status;
+                            renderList(app.extract('recipes'), 10);
                         }
                     );
                 }
@@ -162,26 +174,14 @@ function renderList(list, count){
         }
         vdom.push(card.main);
         item = list[i];
-        vdom.content(card.title, item.title);
+        vdom.content(card.title, item.dishName);
         vdom.attribute(card.image, 'src', item.imgUrl);
         vdom.attribute(card.image, 'dishID', item.dishID);
         like = item.like;
-        vdom.attribute(
-            card.likeIcon, 
-            'style', 
-            like == 1 ?
-                'font-size: 36px; color: #20E371; cursor: pointer;' :
-                'font-size: 36px; color: #BBB; cursor: pointer;'
-        );
+        vdom.style(card.likeIcon, 'color', like == 1 ? '#20E371' : '#BBB');
         vdom.attribute(card.likeIcon, 'dishID', item.dishID);
         vdom.attribute(card.likeIcon, 'cardLocation', i);
-        vdom.attribute(
-            card.dislikeIcon,
-            'style',
-            like == -1 ?
-                'font-size: 36px; color: #FF4D00; cursor: pointer;' :
-                'font-size: 36px; color: #BBB; cursor: pointer;'
-        );
+        vdom.style(card.dislikeIcon, 'color', like == -1 ? '#FF4D00' : '#BBB');
         vdom.attribute(card.dislikeIcon, 'dishID', item.dishID);
         vdom.attribute(card.dislikeIcon, 'cardLocation', i);
     }
