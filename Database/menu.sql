@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2019 at 10:44 AM
--- Server version: 10.4.6-MariaDB
--- PHP Version: 7.3.9
+-- Generation Time: Nov 24, 2019 at 07:12 AM
+-- Server version: 10.1.40-MariaDB
+-- PHP Version: 7.3.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -34,7 +34,11 @@ CREATE TABLE `dish_info` (
   `ingredients1` varchar(30) DEFAULT NULL,
   `ingredients2` varchar(30) DEFAULT NULL,
   `ingredients3` varchar(30) DEFAULT NULL,
-  `popularity` int(10) NOT NULL DEFAULT 0,
+  `ingredients4` varchar(30) DEFAULT NULL,
+  `ingredients5` varchar(30) DEFAULT NULL,
+  `category` varchar(20) NOT NULL,
+  `steps` text NOT NULL,
+  `popularity` int(10) NOT NULL DEFAULT '0',
   `userID` varchar(64) NOT NULL,
   `imgscr` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -43,13 +47,15 @@ CREATE TABLE `dish_info` (
 -- Dumping data for table `dish_info`
 --
 
-INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`, `imgscr`) VALUES
-(1, 'sandwich', 'bread', 'cheese', 'ham', 0, 'aaa', ''),
-(2, 'sushi', 'rice', 'seaweed', 'fish', 0, 'aaa', 'web/sushi.jpg'),
-(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', 0, 'aaa', 'web/spaghetti.jpg'),
-(4, 'hotdog', 'bread', 'sausage', NULL, 0, 'bbb', ''),
-(5, 'scrambled eggs', 'eggs', 'milk', 'NULL', 0, 'aaa', 'web/Scrambled_eggs.jpg'),
-(6, 'chicken rice', 'chicken ', 'rice', 'NULL', 0, 'aaa', 'web/chickenrice.jpg');
+INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `ingredients4`, `ingredients5`, `category`, `steps`, `popularity`, `userID`, `imgscr`) VALUES
+(1, 'sandwich', 'bread', 'cheese', 'ham', NULL, NULL, '', '', 0, 'aaa', ''),
+(2, 'sushi', 'rice', 'seaweed', 'fish', NULL, NULL, '', '', 0, 'aaa', 'web/sushi.jpg'),
+(3, 'spaghetti', 'spaghetti', 'sausage', 'onion', NULL, NULL, '', '', 0, 'aaa', 'web/spaghetti.jpg'),
+(4, 'hotdog', 'bread', 'sausage', NULL, NULL, NULL, '', '', 0, 'bbb', ''),
+(5, 'scrambled eggs', 'eggs', 'milk', 'NULL', NULL, NULL, '', '', 0, 'aaa', 'web/Scrambled_eggs.jpg'),
+(6, 'chicken rice', 'chicken ', 'rice', 'NULL', NULL, NULL, '', '', 0, 'aaa', 'web/chickenrice.jpg'),
+(7, 'Pad thai', '', '', '', NULL, NULL, '', '', 0, 'aaa', 'Beef-Curry.jpg'),
+(8, 'Bolognese', 'Nyhed Beef', 'Cheese', 'Tomato Sauce', '', '', 'Italian', 'dsfg', 0, 'aaa', 'web/pasta.jpg');
 
 -- --------------------------------------------------------
 
@@ -59,7 +65,7 @@ INSERT INTO `dish_info` (`dishID`, `dishName`, `ingredients1`, `ingredients2`, `
 
 CREATE TABLE `likes_list` (
   `dishID` int(10) NOT NULL,
-  `likes` int(10) NOT NULL DEFAULT 0,
+  `likes` int(10) NOT NULL DEFAULT '0',
   `userID` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -72,7 +78,9 @@ INSERT INTO `likes_list` (`dishID`, `likes`, `userID`) VALUES
 (3, 1, 'meow@cat.com'),
 (3, 1, 'tom898@gmail.com'),
 (4, -1, 'aaa'),
-(4, -1, 'meow@cat.com');
+(4, -1, 'meow@cat.com'),
+(7, 0, 'aaa'),
+(8, 0, 'aaa');
 
 -- --------------------------------------------------------
 
@@ -91,10 +99,12 @@ CREATE TABLE `tag_info` (
 --
 
 INSERT INTO `tag_info` (`tagName`, `tagType`, `subTag`) VALUES
+('', 'ingredient', ''),
 ('bread', 'ingredient', ''),
 ('cheese', 'ingredient', ''),
 ('fish', 'ingredient', 'meat'),
 ('ham', 'ingredient', 'meat'),
+('Nyhed Beef', 'ingredient', 'Meat'),
 ('onion', 'ingredient', 'vegetables'),
 ('rice', 'ingredient', ''),
 ('sausage', 'ingredient', 'meat'),
@@ -127,7 +137,10 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 ('onion', 3),
 ('sausage', 3),
 ('spaghetti', 3),
-('sausage', 4);
+('sausage', 4),
+('', 7),
+('Nyhed Beef', 8),
+('Cheese', 8);
 
 -- --------------------------------------------------------
 
@@ -138,6 +151,8 @@ INSERT INTO `tag_join_dish` (`tagName`, `dishID`) VALUES
 CREATE TABLE `users` (
   `userID` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
+  `first_name` varchar(40) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
   `pic` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -145,13 +160,15 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `password`, `pic`) VALUES
-('aaa', '', 'web/cat1.jpg'),
-('bbb', '222', ''),
-('helloworld@gmail.com', 'helloworld123', ''),
-('mary0918@gmail.com', 'cmqgu879', ''),
-('meow@cat.com', 'ilovecat146', ''),
-('tom898@gmail.com', 'seeyou898', '');
+INSERT INTO `users` (`userID`, `password`, `first_name`, `last_name`, `pic`) VALUES
+('aaa', '', '', '', 'web/cat1.jpg'),
+('bbb', '222', '', '', ''),
+('helloworld@gmail.com', 'helloworld123', '', '', ''),
+('mary0918@gmail.com', 'cmqgu879', '', '', ''),
+('matthew@12345.com', '1234', '', '', ''),
+('matthew@1234567.com', '1111', '', '', ''),
+('meow@cat.com', 'ilovecat146', '', '', ''),
+('tom898@gmail.com', 'seeyou898', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -198,7 +215,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `dish_info`
 --
 ALTER TABLE `dish_info`
-  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `dishID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables

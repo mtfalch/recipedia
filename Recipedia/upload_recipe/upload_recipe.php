@@ -3,11 +3,16 @@
       $in1 = $_POST['in1'];
       $in2 = $_POST['in2'];
       $in3 = $_POST['in3'];
+      $in4 = $_POST['in4'];
+      $in5 = $_POST['in5'];
       $intype1 = $_POST['intype1'];
       $intype2 = $_POST['intype2'];
       $intype3 = $_POST['intype3'];
+      $intype3 = $_POST['intype4'];
+      $intype3 = $_POST['intype5'];
       $category = $_POST['category'];
       $dishname = $_POST['dish'];
+      $steps = $_POST['steps'];
       $upload_suc = 0;
     //to prevent mysql injecttion
     //$name = stripcslashes($name);
@@ -89,8 +94,8 @@
               }
               else
               {
-                  $sql = "insert INTO `dish_info`(`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`, `popularity`, `userID`, `imgscr`)
-                          VALUES (".$newDishID.",'".$dishname."','".$in1."','".$in2."','".$in3."',0,'aaa','".$target_file."');";
+                  $sql = "insert INTO `dish_info`(`dishID`, `dishName`, `ingredients1`, `ingredients2`, `ingredients3`,`ingredients4`,`ingredients5`, `category`, `steps`, `popularity`, `userID`, `imgscr`)
+                          VALUES (".$newDishID.",'".$dishname."','".$in1."','".$in2."','".$in3."','".$in4."','".$in5."','".$category."','".$steps."',0,'aaa','".$target_file."');";
 
               }
               if (mysqli_query($link,$sql))
@@ -135,6 +140,20 @@
         mysqli_query($link,$sql_tag_info_3);
       }
 
+      if($in4 != NULL)
+      {
+        $sql_tag_info_4 = "insert INTO `tag_info`(`tagName`, `tagType`, `subTag`)
+                          VALUES ('".$in4."','ingredient','".$intype4.")";
+        mysqli_query($link,$sql_tag_info_4);
+      }
+
+      if($in5 != NULL)
+      {
+        $sql_tag_info_5 = "insert INTO `tag_info`(`tagName`, `tagType`, `subTag`)
+                          VALUES ('".$in5."','ingredient','".$intype5.")";
+        mysqli_query($link,$sql_tag_info_5);
+      }
+
       //insert tag_join_dish
       $sql_tag_join_dish_1 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in1."',".$newDishID.")";
       mysqli_query($link,$sql_tag_join_dish_1);
@@ -150,6 +169,19 @@
         $sql_tag_join_dish_3 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in3."',".$newDishID.")";
         mysqli_query($link,$sql_tag_join_dish_3);
       }
+
+      if($in4 != NULL)
+      {
+        $sql_tag_join_dish_4 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in4."',".$newDishID.")";
+        mysqli_query($link,$sql_tag_join_dish_4);
+      }
+
+      if($in5 != NULL)
+      {
+        $sql_tag_join_dish_5 = "insert INTO `tag_join_dish`(`tagName`, `dishID`) VALUES ('".$in5."',".$newDishID.")";
+        mysqli_query($link,$sql_tag_join_dish_3);
+      }
+
       //insert like_list
       $sql_like_list = "insert INTO `likes_list`(`dishID`, `likes`, `userID`) VALUES (".$newDishID.",0,'aaa')";
       mysqli_query($link,$sql_like_list);

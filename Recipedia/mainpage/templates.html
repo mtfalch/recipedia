@@ -164,27 +164,93 @@
 <div class="col-sm-6">
     <br>
     <h1>Upload your recipe</h1><hr>
-        <form  method="POST"  target="_blank">
+        <form method="POST" enctype="multipart/form-data" target="_blank" action="../upload_recipe/upload_recipe.php">
+
             <div class="form-group">
                 <label for="dish_name" required="required">Dish name</label>
-                <input type="text" name="dish_namei" class="form-control" id="dish_name" placeholder="Dish Name">
+                <input type="text" name="dish" id="dish" class="form-control">
             </div></br>
 
             <div class="form-group">
-                <label for="exampleFormControlSelect1">Dish Category</label>
-                <select class="form-control" id="exampleFormControlSelect1" name="platform" required="required">
-                    <option>Breakfast</option>
-                    <option>Lunch</option>
-                    <option>Dinner</option>
+                <label for="category">Dish Category</label>
+                <select class="form-control" id="category" name="category" required="required">
+                    <option>--Options--</option>
+                    <option>Chinese</option>
+                    <option>Western</option>
+                    <option>Italian</option>
+                    <option>Japanese</option>
+                    <option>Thai</option>
+                    <option>Vietnamese</option>
+                    <option>Others</option>
                 </select>
-            </div>
+            </div><hr>
+            <p>
+            <label>5 main ingredients:</label><br><br>
+            Ingredient 1: <input type="text" name="in1" id="in1">
+            Type of Ingredient: <select class="form-control" id="intype1" name="intype1" required="required">
+                    <option>--Options--</option>                  
+                    <option>Dairy</option>
+                    <option>Eggs</option>
+                    <option>Herbs & Spices</option>
+                    <option>Meat</option>
+                    <option>Seafood</option>
+                    <option>Vegetables</option> 
+                    <option>Null</option>                  
+                </select><br><br>
+            Ingredient 2: <input type="text" name="in2" id="in2">
+            Type of Ingredient:  <select class="form-control" id="intype2" name="intype2" required="required">
+                    <option>--Options--</option>                  
+                    <option>Dairy</option>
+                    <option>Eggs</option>
+                    <option>Herbs & Spices</option>
+                    <option>Meat</option>
+                    <option>Seafood</option>
+                    <option>Vegetables</option> 
+                    <option>Null</option> 
+                </select><br><br>
+            Ingredient 3: <input type="text" name="in3" id="in3">
+            Type of Ingredient:  <select class="form-control" id="intype3" name="intype3" required="required">
+                    <option>--Options--</option>                  
+                    <option>Dairy</option>
+                    <option>Eggs</option>
+                    <option>Herbs & Spices</option>
+                    <option>Meat</option>
+                    <option>Seafood</option>
+                    <option>Vegetables</option> 
+                    <option>Null</option>               
+                </select><br><br>
+                Ingredient 4: <input type="text" name="in4" id="in4">
+            Type of Ingredient: <select class="form-control" id="intype4" name="intype4" required="required">      
+                    <option>--Options--</option>                  
+                    <option>Dairy</option>
+                    <option>Eggs</option>
+                    <option>Herbs & Spices</option>
+                    <option>Meat</option>
+                    <option>Seafood</option>
+                    <option>Vegetables</option> 
+                    <option>Null</option>               
+                </select><br><br>
+                Ingredient 5: <input type="text" name="in5" id="in5">
+            Type of Ingredient: <select class="form-control" id="intype5" name="intype5" required="required">
+                    <option>--Options--</option>                  
+                    <option>Dairy</option>
+                    <option>Eggs</option>
+                    <option>Herbs & Spices</option>
+                    <option>Meat</option>
+                    <option>Seafood</option>
+                    <option>Vegetables</option> 
+                    <option>Null</option>                   
+                </select><br><br>
+            </p><hr>
 
+            <div class="form-group">
+                <textarea class="form-control" rows="5" id="steps" name ="steps" placeholder="Steps & ingredients quantity: "></textarea>
+            </div></br><hr>
             <div class="form-group mt-3">
-            <label class="mr-2">Upload Dish picture:</label>
-            <input type="file" name="file">
-            </div>
-
-          <button type="submit" class="btn btn-primary">Submit</button>
+            <label class="mr-2">Upload dish picture:</label>
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            </div></br></br></br>
+          <center><button type="submit" class="btn btn-primary">Submit</button></center>
         </form>
     </div>
 </div>
