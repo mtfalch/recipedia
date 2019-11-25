@@ -36,7 +36,8 @@ body{
     left:       0;
     height:     100vh;
 	width:      100vw;
-	overflow:	hidden;
+
+	overflow : hidden;
 
 	font-family: 	Arial, Helvetica, sans-serif;
 }
@@ -268,6 +269,7 @@ body{
 .input-bucket{
 	position: 	relative;
 }
+.media-bucket i,
 .media-bucket img,
 .media-bucket video,
 .media-bucket canvas{
