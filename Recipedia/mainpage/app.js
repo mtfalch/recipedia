@@ -1,5 +1,8 @@
 //Global Initialization
 //*******************************************************************//
+var main = document.getElementById('main');
+var sub = document.getElementById('sub');
+var warning = document.getElementById('warning');
 var navBar = document.getElementById('nav-bar');
 var recipesButton = document.getElementById('recipes-button');
 var searchButton = document.getElementById('search-button');
@@ -17,8 +20,9 @@ var settingsField = document.createElement('DIV');
 var recipeCardsBuffer = [];
 //*******************************************************************//
 
+//Naive router implementation
 function route(){
-    var route = window.location.hash;
+    var route = location.hash;
     if(!route)
         route = '#recipes';
     switch(route){
@@ -28,6 +32,7 @@ function route(){
         case '#settings': settingsButton.onclick(); break;
     }
 }
+window.onhashchange = route;
 
 //Create transistion effect for display update
 function refreshDisplayAnimation(refreshHandler){
@@ -127,7 +132,7 @@ function createSearchField(){
     field.currentTags = [];
     var searchAlgorithmButton = TE.fetchTemplate('search');
     searchAlgorithmButton.classList.add('click-effect');
-    searchAlgorithmButton.children[0].children[0].innerHTML = 'publish';
+    searchAlgorithmButton.children[0].children[0].innerHTML = 'search';
     searchAlgorithmButton.children[1].innerHTML = 'Search with Selected Ingredients';
     searchAlgorithmButton.style.color = '#FFF';
     searchAlgorithmButton.style.backgroundColor = '#00B58B';
@@ -160,6 +165,7 @@ function createSearchField(){
 //Initialise the recipeList
 function createRecipeList(){
     recipeList.classList.add('mg');
+    recipeList.style.overflowX = 'visible';
     recipeList.style.overflowY = 'scroll';
     recipeList.scrollPosition = 0;
     listInit(recipeList, 10);
@@ -180,10 +186,10 @@ function createSettingsField(){
 function searchRecipe(){
     var tags = app.extract('searchCheckList');
     if(!tags.length)
-        return console.warn('[Search]: Cannot search, you have not selected anything...');
+        return displayWarning('[Search]: Cannot search, you have not selected anything...');
     var userID = getCookie('userID');
     if(userID.length == 0)
-        return console.warn('[Search]: Cannot search, you are not logged in...');
+        return displayWarning('[Search]: Cannot search, you are not logged in...');
     var formData = new FormData();
     formData.append('userID', userID);
     formData.append('tags', tags);
@@ -195,37 +201,6 @@ function searchRecipe(){
             recipesButton.onclick();
         }
     );
-}
-
-//Add a new recipe element to the recipeListBuffer
-// function createRecipeCards(count){
-//     var i; for(i = 0; i < count; i++){
-//         var container = TE.fetchTemplate('recipeCard');
-//         container.style.backgroundColor = '#FFF';
-//         var likeButton = container.children[1].children[1];
-//         var dislikeButton = container.children[1].children[2];
-//         likeButton.onclick = function(){
-//             var dishID  = 
-//                 this.parentElement
-//                     .parentElement
-//                     .dishID;
-//             //AJAX Post (userID, dishID, Like)
-//             alert('like:' + dishID);
-//         }
-//         dislikeButton.onclick = function(){
-//             var dishID  = 
-//                 this.parentElement
-//                     .parentElement
-//                     .dishID;
-//             //AJAX Post (userID, dishID, Like)
-//             alert('dislike:' + dishID);
-//         }
-//         recipeCardsBuffer.push(container);
-//     }
-// }
-
-function renderCheckList(parent, json){
-
 }
 
 function createCollapsible(parent, title){
@@ -263,46 +238,56 @@ function createCheckListItem(parent, itemName){
     parent.appendChild(checkListItem);
 }
 
-// function renderRecipeList(recipes, renderCount){
-//     var t1 = performance.now();
-//     var renderBuffer = [];
-//     var i; for(i = 0; i < renderCount; i++){
-//         var recipe = recipes[i];
-//         var container = recipeCardsBuffer[i];
-//         container.dishID = recipe.dishID;
-//         var imageField = container.children[0];
-//         var bottomBar = container.children[1];
-//         var tagBar = container.children[2];
-//         var titleTextField = bottomBar.children[0].children[0];
-//         titleTextField.innerHTML = recipe.title;
+function displayWarning(msg){
+    document.getElementById('warning-msg').innerHTML = msg;
+    warning.style.zIndex = 11;
+    warning.style.opacity = 1;
+    warning.style.transition = 'opacity 0.5s ease-in-out';
+    main.classList.add('blur');
+}
 
-//         imageField.children[0].children[0].src = recipe.imgUrl ? recipe.imgUrl : '';
+function hideWarning(){
+    warning.style.opacity = 0;
+    setTimeout(
+        () => warning.style.zIndex = -1,
+        500
+    );
+    main.classList.remove('blur');
+}
 
-//         tagBar.children[0].innerHTML = '';
+function displaySub(){
+    sub.style.opacity = 1;
+    sub.style.zIndex = 10;
+    sub.style.left = '100%';
+    navBar.classList.add('blur');
+    displayContainer.classList.add('blur');
+    setTimeout(
+        function(){
+            sub.style.transition = '0.2s';
+            sub.style.left = '0';
+        },
+        10
+    );
+    setTimeout(
+        () => sub.style.transition = '',
+        210
+    );
+}
 
-//         var tag; for(tag of recipe.tags)
-//             utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
-        
-//         switch(recipe.like){
-//             case 0: break;
-//             case 1: 
-//                 bottomBar.children[1].children[0].style.color = '#20E371'; 
-//                 bottomBar.children[2].children[0].style.color = '#BBB';
-//                 break;
-//             case -1: 
-//                 bottomBar.children[2].children[0].style.color = '#FF4D00'; 
-//                 bottomBar.children[1].children[0].style.color = '#BBB';
-//                 break;
-//             default: break;
-//         }
-//         renderBuffer.push(container);
-//     }
-//     recipeList.innerHTML = '';
-//     for(var elem of renderBuffer)
-//         recipeList.appendChild(elem);
-//     var t2 = performance.now();
-//     console.log(t2 - t1);
-// }
+function exitSub(){
+    sub.style.transition = '0.2s';
+    sub.style.left = '100%';
+    navBar.classList.remove('blur');
+    displayContainer.classList.remove('blur');
+    setTimeout(
+        function(){
+            sub.style.zIndex = -1;
+            sub.style.transition = ''
+            sub.style.left = '0';
+        },
+        200
+    );
+}
 
 function updateDisplayPage(newPageElement){
     refreshDisplayAnimation(function(){
@@ -327,6 +312,7 @@ TE.globalInitialise(
         createRecipeUploadField();
         createSettingsField();
         route();
+        Colorant.paint();
 
         //Using watcher to create searchField
         //By setting app.searchCheckList to [] will clear all entries
