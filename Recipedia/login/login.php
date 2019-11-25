@@ -6,6 +6,9 @@
 	$password = $_POST['password'];
 	$remember = $_POST['remember'];
 
+	//session
+	$_SESSION["user"] = $username;
+
 	//to prevent mysql injecttion
 	$username= stripcslashes($username);
 	$password= stripcslashes($password);
@@ -19,7 +22,7 @@
 	$json -> status = "fail";
 
 	//if cookie set before
-	//Query
+	//Ajax
 	$row = mysqli_fetch_array($result);
 	if($row['userID'] == $username&& $row['password']==$password){
 				$json -> loggedUser = $username;

@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    <?php
+<?php
+    session_start();
+    $user=$_SESSION["user"];
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $age = $_POST['age'];
+    $prefer_category = $_POST['prefer_category'];
     $target_dir = "web/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+    $link = mysqli_connect("localhost", "root", "", "menu");
+      if ($link->connect_error) {
+        die("Connection failed: " . $link->connect_error);
+      }
+
     // Check if image file is a actual image or fake image
     if(isset($_POST["submit"])) {
         $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
         if($check !== false) {
-            echo "The file is an image - " . $check["mime"] . ".<br>";
             $uploadOk = 1;
         } else {
             echo "The file is not an image.<br>";
@@ -42,10 +47,11 @@
                 die("Connection failed: " . $link->connect_error);
               }
                 //$upload_sql = "UPDATE users SET pic ='".$target_file."'WHERE userID='".$name."'";
-                $upload_sql = "UPDATE users SET pic ='".$target_file."'WHERE userID='aaa'";
+                $upload_sql = "UPDATE users SET pic ='".$target_file."'WHERE userID='bbb'";
 
               if (mysqli_query($link,$upload_sql)) {
                    echo "New record created successfully";
+                   $uploadOk = 1;
                } else {
                    echo "Error: " . $link->error;
                }
@@ -59,6 +65,11 @@
             echo "Sorry, there was an error uploading your file.<br>";
         }
     }
-    ?>
-  </body>
-</html>
+
+    if($uploadOk == 1){
+        $sql_tag_info_1 = "UPDATE users SET 
+        first_name = '".$first_name."', last_name = '".$last_name."', age = '".$age."' , prefer_category = '".$prefer_category."'
+        WHERE userID='".$user."'";
+        mysqli_query($link,$sql_tag_info_1);
+    }  
+?>
