@@ -14,7 +14,6 @@ var displayContainer = document.getElementById('display');
 var searchField = document.createElement('DIV');
 var recipeList = document.createElement('DIV');
 var recipeUploadField = document.createElement('DIV');
-var recipeInfoField = document.createElement('DIV');
 var settingsField = document.createElement('DIV');
 
 var recipeCardsBuffer = [];
@@ -114,12 +113,17 @@ function initialiseNavBar(){
     utilInjectHandlerToNameSelectionSet(
         'nav',
         function(elem){
+            var hash = elem.getAttribute('href');
+            if(hash != 'recipes' && app.userID == '')
+                return displayWarning('This function is not accessible, Please login first...');
             elem.style.backgroundColor = '#00DAA7';
             elem.style.color = '#FFFFFF';
             location.href = location.href.split('#')[0] + '#' + elem.getAttribute('href');
             updateDisplayPage(elem.associatedElement);
         },
         function(elem){
+            if(location.hash == '#' + elem.getAttribute('href'))
+                return;
             elem.style.backgroundColor = '#FFFFFF';
             elem.style.color = '#4D4D4D';
         }
@@ -136,7 +140,7 @@ function createSearchField(){
     searchAlgorithmButton.children[1].innerHTML = 'Search with Selected Ingredients';
     searchAlgorithmButton.style.color = '#FFF';
     searchAlgorithmButton.style.backgroundColor = '#00B58B';
-    searchAlgorithmButton.onclick = searchRecipe;
+    searchAlgorithmButton.onclick = function(){searchRecipe()};
     var innerBox = TE.fetchTemplate('innerBox');
     innerBox.appendChild(searchAlgorithmButton);
     field.appendChild(innerBox);
@@ -173,32 +177,29 @@ function createRecipeList(){
 
 function createRecipeUploadField(){
     var field = utilCreateField(recipeUploadField);
-}
-
-function createRecipeInfoField(){
-    var field = utilCreateField(recipeInfoField);
+    var uploadTemplate = TE.fetchTemplate('upload');
+    field.appendChild(uploadTemplate);
 }
 
 function createSettingsField(){
     var field = utilCreateField(settingsField);
+    var settingsTemplate = TE.fetchTemplate('setting');
+    field.appendChild(settingsTemplate);
 }
 
-function searchRecipe(){
-    var tags = app.extract('searchCheckList');
-    if(!tags.length)
-        return displayWarning('[Search]: Cannot search, you have not selected anything...');
-    var userID = getCookie('userID');
-    if(userID.length == 0)
-        return displayWarning('[Search]: Cannot search, you are not logged in...');
+function searchRecipe(input){
+    var tags = input ? input : app.extract('searchCheckList');
+    var userID = app.userID;
     var formData = new FormData();
-    formData.append('userID', userID);
+    formData.append('userID', userID.length ? userID : '');
     formData.append('tags', tags);
     AJAXPost(
         'search.php',
         formData,
         function(data){
             app.recipes = data.list;
-            recipesButton.onclick();
+            if(location.hash != '#recipe')
+                recipesButton.onclick();
         }
     );
 }
@@ -308,7 +309,6 @@ TE.globalInitialise(
         initialiseNavBar();
         createSearchField();
         createRecipeList();
-        createRecipeInfoField();
         createRecipeUploadField();
         createSettingsField();
         route();
@@ -353,11 +353,9 @@ TE.globalInitialise(
             }
         );
 
-        app.recipes = [
-            {dishID: 3, dishName: "Scrambled Eggs", like: 1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-            {dishID: 1, dishName: "Scrambled Eggs", like: -1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
-            {dishID: 2, dishName: "Scrambled Eggs", like: 0, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
-        ];
+        app.userID = getCookie('userID');
+
+        searchRecipe([]);
 
     }
 );
