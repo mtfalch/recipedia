@@ -320,6 +320,13 @@ TE.globalInitialise(
         //Any change to app.recipes will be rendered immediately
         app
         .watch(
+            'userID', 
+            '', 
+            function(prop, userID){
+                document.getElementById('user-id').innerHTML = userID == '' ? 'Login Now!' : userID;
+            }
+        )
+        .watch(
             'searchCheckList', 
             [], 
             function(prop, list){
