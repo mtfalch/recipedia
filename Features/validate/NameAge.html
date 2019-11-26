@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+      function valid() {
+        fspan.innerHTML = "";
+        lspan.innerHTML = "";
+        agespan.innerHTML = "";
+
+        var first = document.forms["myForm"]["fName"].value;
+        var last = document.forms["myForm"]["lName"].value;
+        var age = document.forms["myForm"]["age"].value;
+
+        var regexpname = /^[a-zA-Z]{3,25}$/;
+
+        if(first == "")
+        {
+          fspan.innerHTML += "Please input first name";
+        }
+        else if(!myForm.fName.value.match(regexpname))
+        {
+          fspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+
+        if(last == "")
+        {
+          lspan.innerHTML += "Please input last name";
+        }
+        else if(!myForm.lName.value.match(regexpname))
+        {
+          lspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+
+        if(age == "")
+        {
+          agespan.innerHTML += "Please input your age";
+        }
+        else if (age >= 0 && age <= 120 )
+        {
+          //alert(age);
+        }
+        else
+        {
+          agespan.innerHTML += "The input age must be between 0 to 120.";
+        }
+      }
+    </script>
+      <title></title>
+  </head>
+  <body>
+    <form name="myForm" method="post">
+      <label>First Name:</label>
+      <input type="text" name="fName" /><span id = "fspan"></span><br><br>
+      <label>Last Name:</label>
+      <input type="text" name="lName" /><span id = "lspan"></span><br><br>
+      <label>Age:</label>
+      <input type="text" name="age" /><span id = "agespan"></span><br><br>
+      <input type="button" value="change" onclick="valid()" />
+    </form>
+  </body>
+</html>
