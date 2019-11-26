@@ -130,7 +130,6 @@
             xhr.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
                     onReadyStateHandler(JSON.parse(this.responseText));
-                    location.href = "../mainpage/app.html";
                 }  
             }
             xhr.open('POST', url, true);

@@ -15,7 +15,7 @@
 
 	//connect to the server and select database
 	$link=mysqli_connect("localhost", "root", "");
-	mysqli_select_db($link,"menu");
+	mysqli_select_db($link,"recipedia");
 
 	//Query the database for user
 	$result=mysqli_query($link,"select * from users where userID = '$username' and password = '$password' ")or die("Failed to query database".mysql_error());

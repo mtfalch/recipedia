@@ -1,55 +1,36 @@
 <?php
-
+    session_start();
     error_reporting(E_ERROR | E_PARSE);
     $serverName = "localhost";
     $serverUserName = "root";
     $serverPassword = "";
-    $serverDatabase = "menu";
+    $serverDatabase = "recipedia";
 
-    $userID = $_POST['userID'];
+    //session
+    $userID = $_SESSION["user"];
 
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword, $serverDatabase);
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
 
-    //UserID Validation, only a registered user can perform like operations
-    $sql = "SELECT count(*) as cnt from users where userID = '$userID'";
+     $tags = explode(',', $_POST['tags']);
 
-    //Predefine valid to false
-    $object -> valid = 'F';
+    if($_POST['tags']){
+        $sql = 
+            "SELECT distinct dish_info.dishID, dish_info.dishName, dish_info.imgscr from dish_info, tag_join_dish where ";
 
-    $query = mysqli_query($con, $sql) or die("Failed at userID validation...");
-    if(mysqli_fetch_array($query)['cnt'] != 1){
-        echo json_encode($object);
-        exit();
-    }
+        $or = false;
+        foreach($tags as $tag){
+            if(!$or){
+                $or = true;
+            }else
+                $sql .= " or ";
+            $sql .= "(tag_join_dish.tagName = " . "'$tag' and tag_join_dish.dishID = dish_info.dishID)";
+        }
 
-    //Usser validated, set valid to true
-    $object -> valid = 'T';
-
-    $tags = explode(',', $_POST['tags']);
-
-    $sql = 
-        "SELECT distinct dish_info.dishID, dish_info.dishName, dish_info.imgscr from dish_info, tag_join_dish where ";
-
-    $or = false;
-    foreach($tags as $tag){
-        if(!$or){
-            $or = true;
-        }else
-            $sql .= " or ";
-        $sql .= "(tag_join_dish.tagName = " . "'$tag' and tag_join_dish.dishID = dish_info.dishID)";
-    }
-
-    // $tagsLength = count($tags);
-    // for($i = 0; $i < $tagsLength; $i++){
-    //     $tag = $tags[i];
-    //     $sql .= " tag_join_dish.tagName = " . "'$tag'";
-    //     if($i != $tags.length - 1)
-    //         $sql .= " or";
-    // }
-
-    $sql .= " order by dish_info.popularity desc";
+        $sql .= " order by dish_info.popularity desc";
+    }else 
+        $sql = "SELECT distinct dishID, dishName, imgscr from dish_info order by popularity desc";
 
     $object -> query = $sql;
 
@@ -62,6 +43,12 @@
         $elem -> dishName = $row['dishName'];
         $elem -> imgUrl = $row['imgscr'];
         array_push($list, $elem);
+    }
+
+    $object -> list = $list;
+    if(strlen($userID) == 0){
+        echo json_encode($object);
+        exit();
     }
 
     foreach($list as $item){
