@@ -39,13 +39,14 @@ function AJAXPost(url, formData, onReadyStateHandler){
                 }
                 else if(res.upload_recipe == "fail"){
                     document.getElementById("response").innerHTML = res.error;
-                }          
+                }
         }
     }
     xhr.open('POST', url, true);
     xhr.send(formData);
 }
         function upload_profile(){
+            validate();
             var form_data = new FormData();
             form_data.append("first_name",document.getElementById("first_name").value);
             form_data.append("last_name",document.getElementById("last_name").value);
@@ -209,7 +210,7 @@ function createSearchField(){
             var i, item, len = data.length; for(i = 0; i < len; i++){
                 item = data[i];
                 tagName = item.tagName,
-                subTag = item.subTag.length == 0 ? 
+                subTag = item.subTag.length == 0 ?
                     'Others' : item.subTag;
                 if(subTag != 'Others' && col[subTag] === undefined)
                     col[subTag] = createCollapsible(searchField.children[0], subTag);
@@ -336,7 +337,7 @@ function createCollapsible(parent, title){
     var collapsible = TE.fetchTemplate('collapsible');
     var toggle = collapsible.children[0];
     var body = collapsible.children[1];
-    
+
     toggle.children[1].innerHTML = title;
     toggle.toggle = false;
     toggle.associateElement = body;
@@ -428,6 +429,45 @@ function updateDisplayPage(newPageElement){
     });
 }
 
+function validate(){
+        fspan.innerHTML = "";
+        lspan.innerHTML = "";
+        agespan.innerHTML = "";
+
+        var first = document.getElementById("first_name").value;
+        var last = document.getElementById("last_name").value;
+        var age = document.getElementById("age").value;
+        var regexpname = /^[a-zA-Z]{3,25}$/;
+        if(first == "")
+        {
+          fspan.innerHTML += "Please input first name";
+        }
+        else if(!first.match(regexpname))
+        {
+          fspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+        if(last == "")
+        {
+          lspan.innerHTML += "Please input last name";
+        }
+        else if(!last.match(regexpname))
+        {
+          lspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+        if(age == "")
+        {
+          agespan.innerHTML += "Please input your age";
+        }
+        else if (age >= 0 && age <= 120 )
+        {
+          //do nothing
+        }
+        else
+        {
+          agespan.innerHTML += "The input age must be between 0 to 120.";
+        }
+}
+
 function logout(){
     if(app.userID == '')
         return displayWarning('You have not signed in...');
@@ -439,7 +479,7 @@ function logout(){
 var app = new Watcher();
 
 TE.globalInitialise(
-    'templates.html', 
+    'templates.html',
     function(){
         //Scripting Starts Here
         initialiseNavBar();
@@ -456,8 +496,8 @@ TE.globalInitialise(
         //Any change to app.recipes will be rendered immediately
         app
         .watch(
-            'userID', 
-            '', 
+            'userID',
+            '',
             function(prop, userID){
                 var userIDField = document.getElementById('user-id');
                 if(userID != '')
@@ -466,8 +506,8 @@ TE.globalInitialise(
             }
         )
         .watch(
-            'searchCheckList', 
-            [], 
+            'searchCheckList',
+            [],
             function(prop, list){
                 localStorage.setItem('searchCheckList', list);
                 var checkListItems = document.getElementsByName('tag');
@@ -481,7 +521,7 @@ TE.globalInitialise(
                         checkListItem.style.backgroundColor = '#EEE';
                         checkListItem.style.color = '#4D4D4D';
                     }
-            }, 
+            },
             null
         )
         .inspect('searchCheckList')
