@@ -432,8 +432,8 @@ function logout(){
     if(app.userID == '')
         return displayWarning('You have not signed in...');
     setCookie('Username', '', 10000);
+    setCookie('bypass', '', 10000);
     location.href = location.origin + location.pathname;
-    //localStorage.clear();
 }
 
 var app = new Watcher();
@@ -458,7 +458,7 @@ TE.globalInitialise(
         .watch(
             'userID', 
             '', 
-            function(prop, userID){
+            function(prop, userID,bypass){
                 var userIDField = document.getElementById('user-id');
                 if(userID != '')
                     userIDField.onclick = undefined;
@@ -495,6 +495,7 @@ TE.globalInitialise(
         );
 
         app.userID = getCookie('Username');
+        app.bypass = getCookie('bypass');
 
         searchUserSuggested();
 

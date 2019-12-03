@@ -30,12 +30,13 @@
             return "";
         }
         function checkcookie(){
-            var user = getCookie("Username");
-            if (user != ""){
-            location.href = "../mainpage/app.html";
+            var bypass = getCookie('bypass');
+            //alert(bypass);
+            if (bypass == "true"){
+                location.href = "../mainpage/app.html";             
             }
-            else{
-                return true;
+            else if (bypass == "false"){
+                return;
             }
         }
     </script>
@@ -157,15 +158,23 @@
               {
                 var res = JSON.parse(this.responseText);
                 if(res.status == "success"){
-                    if (remember.checked == true){
                     var d = new Date();
                     var Username;
                     d.setTime(d.getTime() + (10 * 24 * 60 * 60 ));
                     var expires = "expires="+d.toUTCString();
+                    if (remember.checked == true){               
+                    var bypass = true;      
                     document.cookie = "Username" + "=" + user + ";" + expires + ";path=/";
-                }
+                    document.cookie = "bypass" + "=" + bypass + ";"  + expires + ";path=/";
+                    }
+                    else if (remember.checked == false){
+                    var bypass = false;
+                    document.cookie = "Username" + "=" + user + ";"  + expires + ";path=/";
+                    document.cookie = "bypass" + "=" + bypass + ";"  + expires + ";path=/";
+                    }
                     location.href = "../mainpage/app.html";
-                }else{
+                }
+                else{
                     document.getElementById('validate-warning').innerHTML = "Invalid username or password!"
                     document.getElementById("validate-warning").classList.remove('retract')
                 }
