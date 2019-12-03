@@ -48,10 +48,11 @@
     }
 
     Template.retrieve = function(index){
+        var $ = this;
         var template = 
             new DOMParser()
                 .parseFromString(
-                    this.$fetched[index].outerHTML, 
+                    $.$fetched[index].outerHTML, 
                     'text/html')
                 .body
                 .children[0];
