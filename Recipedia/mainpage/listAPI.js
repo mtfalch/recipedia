@@ -86,6 +86,7 @@ function listInit(listElement, listCount){
                 dishID : -1,
                 onclick : function(){
                     var userID = getCookie('userID');
+                    //var bypass = getCookie('bypass_isset');
                     var dishID = this.dishID;
                     var cardLocation = this.cardLocation;
                     var formData = new FormData();
