@@ -18,12 +18,7 @@ function listInit(listElement, listCount){
                 class : 'mr d12 screen h7',
                 style : 'background-color: #EEE;border-bottom: 1px solid #EEEEEE;'
             },
-            {
-                dishID : -1,
-                onclick : function(){
-                    
-                }
-            }
+            {}
         );
         var imgBucket = vdom.vnode('div', 
             {
@@ -32,6 +27,25 @@ function listInit(listElement, listCount){
             {}
         );
         var img = vdom.vnode('img', {src : ''}, {});
+        var more = vdom.vnode('div', {
+            class : 'media-bucket elevate-3 click-effect',
+            $style : {
+                position: 'absolute',
+                height: '48px',
+                width: '48px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                backgroundColor: '#444',
+                color: 'white',
+                margin: '10px'
+            }
+        }, {
+            innerHTML : '<i class="material-icons" style="font-size: 36px;">zoom_in</i>',
+            dishID : -1,
+            onclick : function(){
+                displaySub(this.dishID);
+            }
+        });
         var bottBar = vdom.vnode('div', 
             {
                 class : 'mr d12 screen h1',
@@ -72,8 +86,8 @@ function listInit(listElement, listCount){
                 dishID : -1,
                 onclick : function(){
                     var userID = getCookie('userID');
-                    var dishID = this.getAttribute('dishID');
-                    var cardLocation = this.getAttribute('cardLocation');
+                    var dishID = this.dishID;
+                    var cardLocation = this.cardLocation;
                     var formData = new FormData();
                     formData.append('userID', userID);
                     formData.append('dishID', dishID);
@@ -83,9 +97,13 @@ function listInit(listElement, listCount){
                         formData,
                         function(data){
                             if(data.valid == 'F')
-                                return console.warn('[Like]: Invalid userID...');
+                                return displayWarning(
+                                    '[Like]: Invalid userID,' +
+                                    'This will not happen in normal situations,' +
+                                    'Please contact our administrator for help.'
+                                );
                             if(data.status == 'F')
-                                return console.warn('[Like]: Error! Unable to like...');
+                                return displayWarning('[Dislike]: Error! Unable to dislike...');
                             app.recipes[cardLocation].like = data.status;
                             renderList(app.extract('recipes'), 10);
                         }
@@ -114,8 +132,8 @@ function listInit(listElement, listCount){
                 dishID : -1,
                 onclick : function(){
                     var userID = getCookie('userID');
-                    var dishID = this.getAttribute('dishID');
-                    var cardLocation = this.getAttribute('cardLocation');
+                    var dishID = this.dishID;
+                    var cardLocation = this.cardLocation;
                     var formData = new FormData();
                     formData.append('userID', userID);
                     formData.append('dishID', dishID);
@@ -125,9 +143,13 @@ function listInit(listElement, listCount){
                         formData,
                         function(data){
                             if(data.valid == 'F')
-                                return console.warn('[Dislike]: Invalid userID...');
+                                return displayWarning(
+                                    '[Dislike]: Invalid userID,' +
+                                    'This will not happen in normal situations,' +
+                                    'Please contact our administrator for help.'
+                                );
                             if(data.status == 'F')
-                                return console.warn('[Dislike]: Error! Unable to dislike...');
+                                return displayWarning('[Dislike]: Error! Unable to dislike...');
                             app.recipes[cardLocation].like = data.status;
                             renderList(app.extract('recipes'), 10);
                         }
@@ -138,6 +160,7 @@ function listInit(listElement, listCount){
         var dislikeIconDes = vdom.vtext('thumb_down_alt');
 
         vdom.push(imgField, card);
+        vdom.push(more, imgField);
         vdom.push(imgBucket, imgField);
         vdom.push(img, imgBucket);
         
@@ -157,6 +180,7 @@ function listInit(listElement, listCount){
         listIndexing[i] = {
             main : card,
             image : img,
+            more : more,
             title : text,
             likeIcon : likeIcon,
             dislikeIcon : dislikeIcon
@@ -176,14 +200,21 @@ function renderList(list, count){
         item = list[i];
         vdom.content(card.title, item.dishName);
         vdom.attribute(card.image, 'src', item.imgUrl);
-        vdom.attribute(card.image, 'dishID', item.dishID);
+        vdom.property(card.more, 'dishID', item.dishID);
         like = item.like;
-        vdom.style(card.likeIcon, 'color', like == 1 ? '#20E371' : '#BBB');
-        vdom.attribute(card.likeIcon, 'dishID', item.dishID);
-        vdom.attribute(card.likeIcon, 'cardLocation', i);
-        vdom.style(card.dislikeIcon, 'color', like == -1 ? '#FF4D00' : '#BBB');
-        vdom.attribute(card.dislikeIcon, 'dishID', item.dishID);
-        vdom.attribute(card.dislikeIcon, 'cardLocation', i);
+        if(app.userID.length){
+            vdom.style(card.likeIcon, 'color', like == 1 ? '#20E371' : '#BBB');
+            vdom.style(card.dislikeIcon, 'color', like == -1 ? '#FF4D00' : '#BBB');
+            vdom.style(card.likeIcon, 'display', 'block');
+            vdom.style(card.dislikeIcon, 'display', 'block');
+        }else{
+            vdom.style(card.likeIcon, 'display', 'none');
+            vdom.style(card.dislikeIcon, 'display', 'none');
+        }
+        vdom.property(card.likeIcon, 'dishID', item.dishID);
+        vdom.property(card.likeIcon, 'cardLocation', i);
+        vdom.property(card.dislikeIcon, 'dishID', item.dishID);
+        vdom.property(card.dislikeIcon, 'cardLocation', i);
     }
     vdom.render();
 }

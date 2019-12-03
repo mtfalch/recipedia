@@ -1,12 +1,13 @@
 <?php
-
+    session_start();
     error_reporting(E_ERROR | E_PARSE);
     $serverName = "localhost";
     $serverUserName = "root";
     $serverPassword = "";
-    $serverDatabase = "menu";
+    $serverDatabase = "recipedia";
 
-    $userID = $_POST['userID'];
+    //session
+    $userID = $_SESSION["user"];
 
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword, $serverDatabase);
     if(!$con)

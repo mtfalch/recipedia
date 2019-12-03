@@ -5,7 +5,7 @@
     $serverPassword = "";
 
     $con = mysqli_connect($serverName, $serverUserName, $serverPassword);
-    mysqli_select_db($con, "menu");
+    mysqli_select_db($con, "recipedia");
 
     $userID = $_POST["email"];
     $password = $_POST["password"];

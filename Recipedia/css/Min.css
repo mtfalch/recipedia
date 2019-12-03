@@ -268,6 +268,7 @@ body{
 .input-bucket{
 	position: 	relative;
 }
+.media-bucket i,
 .media-bucket img,
 .media-bucket video,
 .media-bucket canvas{

@@ -1,8 +1,5 @@
 //Global Initialization
 //*******************************************************************//
-var main = document.getElementById('main');
-var sub = document.getElementById('sub');
-var warning = document.getElementById('warning');
 var navBar = document.getElementById('nav-bar');
 var recipesButton = document.getElementById('recipes-button');
 var searchButton = document.getElementById('search-button');
@@ -14,13 +11,14 @@ var displayContainer = document.getElementById('display');
 var searchField = document.createElement('DIV');
 var recipeList = document.createElement('DIV');
 var recipeUploadField = document.createElement('DIV');
+var recipeInfoField = document.createElement('DIV');
 var settingsField = document.createElement('DIV');
 
 var recipeCardsBuffer = [];
 var uploaded_profile = false;
 var uploaded_recipe = false;
 //*******************************************************************//
-
+//Upload file
 function AJAXPost(url, formData, onReadyStateHandler){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
@@ -39,14 +37,13 @@ function AJAXPost(url, formData, onReadyStateHandler){
                 }
                 else if(res.upload_recipe == "fail"){
                     document.getElementById("response").innerHTML = res.error;
-                }
+                }          
         }
     }
     xhr.open('POST', url, true);
     xhr.send(formData);
 }
         function upload_profile(){
-            validate();
             var form_data = new FormData();
             form_data.append("first_name",document.getElementById("first_name").value);
             form_data.append("last_name",document.getElementById("last_name").value);
@@ -74,19 +71,6 @@ function AJAXPost(url, formData, onReadyStateHandler){
             form_data.append("fileToUpload", document.getElementById('fileToUpload').files[0]);
             AJAXPost("../upload_recipe/upload_recipe.php",form_data,function(data){});
         }
-//Naive router implementation
-function route(){
-    var route = location.hash;
-    if(!route)
-        route = '#recipes';
-    switch(route){
-        case '#recipes': recipesButton.onclick(); break;
-        case '#search': searchButton.onclick(); break;
-        case '#upload': uploadButton.onclick(); break;
-        case '#settings': settingsButton.onclick(); break;
-    }
-}
-window.onhashchange = route;
 
 //Create transistion effect for display update
 function refreshDisplayAnimation(refreshHandler){
@@ -168,17 +152,12 @@ function initialiseNavBar(){
     utilInjectHandlerToNameSelectionSet(
         'nav',
         function(elem){
-            var hash = elem.getAttribute('href');
-            if(hash != 'recipes' && app.userID == '')
-                return displayWarning('This function is not accessible, Please login first...');
             elem.style.backgroundColor = '#00DAA7';
             elem.style.color = '#FFFFFF';
             location.href = location.href.split('#')[0] + '#' + elem.getAttribute('href');
             updateDisplayPage(elem.associatedElement);
         },
         function(elem){
-            if(location.hash == '#' + elem.getAttribute('href'))
-                return;
             elem.style.backgroundColor = '#FFFFFF';
             elem.style.color = '#4D4D4D';
         }
@@ -191,153 +170,88 @@ function createSearchField(){
     field.currentTags = [];
     var searchAlgorithmButton = TE.fetchTemplate('search');
     searchAlgorithmButton.classList.add('click-effect');
-    searchAlgorithmButton.children[0].children[0].innerHTML = 'search';
+    searchAlgorithmButton.children[0].children[0].innerHTML = 'publish';
     searchAlgorithmButton.children[1].innerHTML = 'Search with Selected Ingredients';
     searchAlgorithmButton.style.color = '#FFF';
     searchAlgorithmButton.style.backgroundColor = '#00B58B';
-    searchAlgorithmButton.onclick = function(){searchRecipe()};
+    searchAlgorithmButton.onclick = function(){
+        recipesButton.onclick();
+    }
     var innerBox = TE.fetchTemplate('innerBox');
     innerBox.appendChild(searchAlgorithmButton);
     field.appendChild(innerBox);
 
-    AJAXPost(
-        'fetchTags.php',
-        null,
-        function(data){
-            var col = {};
-            col['Others'] = createCollapsible(searchField.children[0], 'Others');
-            var tagName, subTag;
-            var i, item, len = data.length; for(i = 0; i < len; i++){
-                item = data[i];
-                tagName = item.tagName,
-                subTag = item.subTag.length == 0 ?
-                    'Others' : item.subTag;
-                if(subTag != 'Others' && col[subTag] === undefined)
-                    col[subTag] = createCollapsible(searchField.children[0], subTag);
-                createCheckListItem(col[subTag], tagName);
-            }
-        }
-    );
-
+    createCollapsible(searchField.children[0], 'Meat');
 }
 
 //Initialise the recipeList
 function createRecipeList(){
     recipeList.classList.add('mg');
-    recipeList.style.overflowX = 'visible';
     recipeList.style.overflowY = 'scroll';
     recipeList.scrollPosition = 0;
-    listInit(recipeList, 10);
 }
 
+//Upload Recipe function
 function createRecipeUploadField(){
     var field = utilCreateField(recipeUploadField);
-    var uploadTemplate = TE.fetchTemplate('upload');
-    field.appendChild(uploadTemplate);
+    var upload = TE.fetchTemplate('upload');
+    recipeUploadField.appendChild(upload);
 }
 
+
+function createRecipeInfoField(){
+    var field = utilCreateField(recipeInfoField);
+    
+}
+
+//Setting function
 function createSettingsField(){
     var field = utilCreateField(settingsField);
-    var settingsTemplate = TE.fetchTemplate('setting');
-    field.appendChild(settingsTemplate);
+    var setting = TE.fetchTemplate('setting');
+    settingsField.appendChild(setting);
 }
 
-function getUserJoinTags(userID){
-    var userJoinTags = getCookie('userJoinTags');
-    var $userJoinTags = userJoinTags.length ? JSON.parse(userJoinTags) : {};
-    if($userJoinTags[userID] === undefined)
-        $userJoinTags[userID] = {};
-    return $userJoinTags;
-}
-
-function deepClone($object){
-    var $clone = {};
-    function clone($0, $1){
-        var props = Object.keys($0);
-        var propsSize = props.length;
-        var i; for(i = 0; i < propsSize; i++){
-            var prop = props[i];
-            var val0 = $0[prop];
-            if(val0 === null || typeof val0 !== 'object'){
-                $1[prop] = val0;
-                continue;
-            }
-            $1[prop] = Array.isArray(val0) ? [] : {};
-            clone($0[prop], $1[prop]);
+//Add a new recipe element to the recipeListBuffer
+function createRecipeCards(count){
+    var i; for(i = 0; i < count; i++){
+        var container = TE.fetchTemplate('recipeCard');
+        container.style.backgroundColor = '#FFF';
+        var likeButton = container.children[1].children[1];
+        var dislikeButton = container.children[1].children[2];
+        likeButton.onclick = function(){
+            var dishID  = 
+                this.parentElement
+                    .parentElement
+                    .dishID;
+            //AJAX Post (userID, dishID, Like)
+            alert('like:' + dishID);
         }
-    }
-    clone($object, $clone);
-    return $clone;
-}
-
-function pushToUserJoinTags(userID, $userJoinTags, tag){
-    tag = '1' + tag;
-    if(userID == '')
-        return;
-    var $user = $userJoinTags[userID] === undefined ?
-        {} : deepClone($userJoinTags[userID]);
-    var $tag;
-    if($user[tag] === undefined)
-        $tag = {count : 0};
-    else{
-        $tag = deepClone($user[tag]);
-        delete $user[tag];
-    }
-    $tag.count++;
-    var $sorted = {};
-    var tags = Object.keys($user);
-    var i, len = tags.length;
-    for(i = 0; i < len; i++){
-        var inner = tags[i];
-        var $inner = $user[inner];
-        if($tag.count >= $inner.count){
-            $sorted[tag] = $tag;
-            $sorted[inner] = $inner;
-        }else{
-            $sorted[inner] = $inner;
-            delete $sorted[tag];
-            $sorted[tag] = $tag;
+        dislikeButton.onclick = function(){
+            var dishID  = 
+                this.parentElement
+                    .parentElement
+                    .dishID;
+            //AJAX Post (userID, dishID, Like)
+            alert('dislike:' + dishID);
         }
+        recipeCardsBuffer.push(container);
     }
-    if(!len)
-        $sorted[tag] = $tag;
-    $userJoinTags[userID] = $sorted;
 }
 
-function searchRecipe(input){
-    var tags = input ? input : app.extract('searchCheckList');
-    var userID = app.userID;
-    var $userJoinTags = getUserJoinTags(app.userID);
-    for(var tag of tags)
-        pushToUserJoinTags(userID, $userJoinTags, tag);
-    setCookie('userJoinTags', JSON.stringify($userJoinTags));
-    var formData = new FormData();
-    formData.append('userID', userID.length ? userID : '');
-    formData.append('tags', tags);
-    AJAXPost(
-        'search.php',
-        formData,
-        function(data){
-            app.recipes = data.list;
-            if(location.hash != '#recipe')
-                recipesButton.onclick();
-        }
-    );
-}
+function renderCheckList(parent, json){
 
-function searchUserSuggested(){
-    var $tags = getUserJoinTags(app.userID)[app.userID];
-    var tags = [];
-    for(var tag of Object.keys($tags))
-        tags.push(tag.slice(1));
-    searchRecipe(tags);
 }
 
 function createCollapsible(parent, title){
     var collapsible = TE.fetchTemplate('collapsible');
     var toggle = collapsible.children[0];
     var body = collapsible.children[1];
-
+    createCheckListItem(body, 'Beef');
+    createCheckListItem(body, 'Chicken');
+    createCheckListItem(body, 'Ham');
+    createCheckListItem(body, 'Salmon');
+    createCheckListItem(body, 'Tuna');
+    
     toggle.children[1].innerHTML = title;
     toggle.toggle = false;
     toggle.associateElement = body;
@@ -354,7 +268,6 @@ function createCollapsible(parent, title){
     }
 
     parent.appendChild(collapsible);
-    return body;
 }
 
 function createCheckListItem(parent, itemName){
@@ -368,55 +281,32 @@ function createCheckListItem(parent, itemName){
     parent.appendChild(checkListItem);
 }
 
-function displayWarning(msg){
-    document.getElementById('warning-msg').innerHTML = msg;
-    warning.style.zIndex = 11;
-    warning.style.opacity = 1;
-    warning.style.transition = 'opacity 0.5s ease-in-out';
-    main.classList.add('blur');
-}
+function renderRecipeList(recipes, renderCount){
+    recipeList.innerHTML = "";
+    var i; for(i = 0; i < renderCount; i++){
+        var recipe = recipes[i];
+        var container = recipeCardsBuffer[i];
+        container.dishID = recipe.dishID;
+        var imageField = container.children[0];
+        var bottomBar = container.children[1];
+        var tagBar = container.children[2];
+        var titleTextField = bottomBar.children[0].children[0];
+        titleTextField.innerHTML = recipe.title;
 
-function hideWarning(){
-    warning.style.opacity = 0;
-    setTimeout(
-        () => warning.style.zIndex = -1,
-        500
-    );
-    main.classList.remove('blur');
-}
+        imageField.children[0].children[0].src = recipe.imgUrl ? recipe.imgUrl : '';
 
-function displaySub(){
-    sub.style.opacity = 1;
-    sub.style.zIndex = 10;
-    sub.style.left = '100%';
-    navBar.classList.add('blur');
-    displayContainer.classList.add('blur');
-    setTimeout(
-        function(){
-            sub.style.transition = '0.2s';
-            sub.style.left = '0';
-        },
-        10
-    );
-    setTimeout(
-        () => sub.style.transition = '',
-        210
-    );
-}
+        var tag; for(tag of recipe.tags)
+            utilAddTagToElement(tagBar.children[0], tag.name, tag.color);
+        
+        switch(recipe.like){
+            case 0: break;
+            case 1: bottomBar.children[1].children[0].style.color = '#20E371'; break;
+            case -1: bottomBar.children[2].children[0].style.color = '#FF4D00'; break;
+            default: break;
+        }
 
-function exitSub(){
-    sub.style.transition = '0.2s';
-    sub.style.left = '100%';
-    navBar.classList.remove('blur');
-    displayContainer.classList.remove('blur');
-    setTimeout(
-        function(){
-            sub.style.zIndex = -1;
-            sub.style.transition = ''
-            sub.style.left = '0';
-        },
-        200
-    );
+        recipeList.appendChild(container);
+    }
 }
 
 function updateDisplayPage(newPageElement){
@@ -429,87 +319,28 @@ function updateDisplayPage(newPageElement){
     });
 }
 
-function validate(){
-        fspan.innerHTML = "";
-        lspan.innerHTML = "";
-        agespan.innerHTML = "";
-
-        var first = document.getElementById("first_name").value;
-        var last = document.getElementById("last_name").value;
-        var age = document.getElementById("age").value;
-        var regexpname = /^[a-zA-Z]{3,25}$/;
-        if(first == "")
-        {
-          fspan.innerHTML += "Please input first name";
-        }
-        else if(!first.match(regexpname))
-        {
-          fspan.innerHTML += "The input must be characters and the length is between 3 to 25";
-        }
-        if(last == "")
-        {
-          lspan.innerHTML += "Please input last name";
-        }
-        else if(!last.match(regexpname))
-        {
-          lspan.innerHTML += "The input must be characters and the length is between 3 to 25";
-        }
-        if(age == "")
-        {
-          agespan.innerHTML += "Please input your age";
-        }
-        else if (age >= 0 && age <= 120 )
-        {
-          //do nothing
-        }
-        else
-        {
-          agespan.innerHTML += "The input age must be between 0 to 120.";
-        }
-}
-
-function logout(){
-    if(app.userID == '')
-        return displayWarning('You have not signed in...');
-    setCookie('Username', '', 10000);
-    location.href = location.origin + location.pathname;
-    //localStorage.clear();
-}
 
 var app = new Watcher();
 
 TE.globalInitialise(
-    'templates.html',
+    'templates.html', 
     function(){
         //Scripting Starts Here
         initialiseNavBar();
         createSearchField();
         createRecipeList();
+        createRecipeInfoField();
         createRecipeUploadField();
         createSettingsField();
-        route();
-        Colorant.paint();
+        createRecipeCards(10);
+        routerStart('recipes');
 
         //Using watcher to create searchField
         //By setting app.searchCheckList to [] will clear all entries
         //Using Watcher to buffer recipe cards rendering
         //Any change to app.recipes will be rendered immediately
-        app
-        .watch(
-            'userID',
-            '',
-            function(prop, userID){
-                var userIDField = document.getElementById('user-id');
-                if(userID != '')
-                    userIDField.onclick = undefined;
-                userIDField.innerHTML = userID == '' ? 'Login Now!' : userID;
-            }
-        )
-        .watch(
-            'searchCheckList',
-            [],
+        app.watch('searchCheckList', [], 
             function(prop, list){
-                localStorage.setItem('searchCheckList', list);
                 var checkListItems = document.getElementsByName('tag');
                 var checkListItem; for(checkListItem of checkListItems)
                     if(list.includes(checkListItem.itemName)){
@@ -521,22 +352,22 @@ TE.globalInitialise(
                         checkListItem.style.backgroundColor = '#EEE';
                         checkListItem.style.color = '#4D4D4D';
                     }
-            },
+            }, 
             null
         )
         .inspect('searchCheckList')
-        .watch(
-            'recipes',
-            [],
+        .watch('recipes',[],
             function(prop, list){
-                localStorage.setItem('recipes', list);
-                renderList(list, 10);
+                renderRecipeList(list, list.length);
             }
-        );
+        )
+        .inspect('recipes');
 
-        app.userID = getCookie('Username');
-
-        searchUserSuggested();
+        app.recipes.add([
+            {dishID: 0, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: 0, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+            {dishID: 1, title: "Scrambled Eggs", tags : [{name:'Beef', color:'lightblue'}], like: -1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'},
+            {dishID: 2, title: "Crab Eggs", tags : [{name:'Crab', color:'pink'}], like: 1, imgUrl : 'https://www.thespruceeats.com/thmb/TyflISuULW9eX8K_mj7whZWfODM=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/super-easy-bread-for-beginners-428108-14_preview-5aff40a26bf06900366f617b.jpeg'}
+        ]);
 
     }
 );
