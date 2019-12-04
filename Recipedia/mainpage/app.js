@@ -48,13 +48,36 @@ function AJAXPost(url, formData, onReadyStateHandler){
     xhr.send(formData);
 }
 function upload_profile(){
+    validate();
     var form_data = new FormData();
     form_data.append("first_name",document.getElementById("first_name").value);
     form_data.append("last_name",document.getElementById("last_name").value);
     form_data.append("age",document.getElementById("age").value);
     form_data.append("prefer_category",document.getElementById("prefer_category").value);
     form_data.append("fileToUpload", document.getElementById('fileToUpload').files[0]);
-    AJAXPost("../upload_profile/upload_profile.php",form_data,function(data){});
+    AJAXPost("../upload_profile/upload_profile.php",form_data,function(data){
+        searchName(data.user);
+        display_profilepic();
+    });  
+}
+
+function display_profilepic(){
+    var profileImage = settingsField.children[0].children[0].children[0];
+    var formData = new FormData();
+    AJAXPost(
+        'firstname.php',
+        formData,
+        function(data){
+            if (data.pic != ''){
+                console.log(data.pic)
+                var result = "../upload_profile/" + data.pic;
+                profileImage.src = result;
+            }
+            else{
+                profileImage.src = "https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg";
+            }
+        }
+    );
 }
 
 function upload_recipe(){
@@ -176,6 +199,8 @@ function initialiseNavBar(){
             elem.style.color = '#FFFFFF';
             location.href = location.href.split('#')[0] + '#' + elem.getAttribute('href');
             updateDisplayPage(elem.associatedElement);
+            if(elem === settingsButton)
+                display_profilepic();
         },
         function(elem){
             if(location.hash == '#' + elem.getAttribute('href'))
@@ -434,13 +459,52 @@ function searchName(userID){
         formData,
         function(data){
             if (data.first_name != ''){
-            document.getElementById('user-id').innerHTML = data.first_name;
+            document.getElementById('user-id').innerHTML = "Hi " + data.first_name;
             }
             else{
                 document.getElementById('user-id').innerHTML = userID;
             }
         }
     );
+}
+
+function validate(){
+        fspan.innerHTML = "";
+        lspan.innerHTML = "";
+        agespan.innerHTML = "";
+
+        var first = document.getElementById("first_name").value;
+        var last = document.getElementById("last_name").value;
+        var age = document.getElementById("age").value;
+        var regexpname = /^[a-zA-Z]{3,25}$/;
+        if(first == "")
+        {
+          fspan.innerHTML += "Please input first name";
+        }
+        else if(!first.match(regexpname))
+        {
+          fspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+        if(last == "")
+        {
+          lspan.innerHTML += "Please input last name";
+        }
+        else if(!last.match(regexpname))
+        {
+          lspan.innerHTML += "The input must be characters and the length is between 3 to 25";
+        }
+        if(age == "")
+        {
+          agespan.innerHTML += "Please input your age";
+        }
+        else if (age >= 0 && age <= 120 )
+        {
+          //do nothing
+        }
+        else
+        {
+          agespan.innerHTML += "The input age must be between 0 to 120.";
+        }
 }
 
 function exitSub(){

@@ -2,7 +2,7 @@ function AJAXPost(url, formData, onReadyStateHandler){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 200){
-            console.log('[AJAX Data]: "' + this.responseText + '"');
+            //console.log('[AJAX Data]: "' + this.responseText + '"');
             onReadyStateHandler(
                 JSON.parse(this.responseText)
             )

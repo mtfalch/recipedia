@@ -155,21 +155,16 @@
 
 <!-- Setting html -->
 <div template="setting" class="container-fluid" style="width: 100%">
-    <br><center><h id="message"></h></center>
-    <div align="center"><img alt="User Pic" style="width: 50%; height: 50%; margin-top: 70px"
-                             src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
-                             id="profile-image1" class="img-circle img-responsive">
+    <div align="center"><img style="width: 50%; height: 50%; margin-top: 70px"
+        id="profile-image" class="img-circle img-responsive" >
+        <br><center><h id="message" style="font-size: 20px ; color: green"></h></center>
         <br>
-        <br>
-        
-        <!-- /input-group -->
     </div>
     <div class="col-sm-6">
         <h4 style="color:#00b1b1;"> Name of Person </h4></span>
-        <!-- <form target="_blank" enctype="multipart/form-data" > -->
-        First name: <input type="text" name="first_name" id="first_name"><br><br>
-        Last name: <input type="text" name="last_name" id="last_name"><br><br>
-        Age: <input type="text" name="age" id="age"><br><br>
+        First name: <input type="text" name="first_name" id="first_name"><span id = "fspan"></span><br><br>
+        Last name: <input type="text" name="last_name" id="last_name"><span id = "lspan"></span><br><br>
+        Age: <input type="text" name="age" id="age"><span id = "agespan"></span><br><br>
         Prefered dish category: <select class="form-control" id="prefer_category" name="prefer_category" required="required">
                     <option>--Options--</option>
                     <option>Chinese</option>
@@ -178,12 +173,12 @@
                     <option>Japanese</option>
                     <option>Thai</option>
                     <option>Vietnamese</option>
+                    <option>Others</option>
                 </select><br><br>
         <label class="mr-2">Upload your profile picture:</label>
             <input id="fileToUpload" type="file" name="fileToUpload" id="fileToUpload"><br><br>
             <center><button value="Submit" style="width:60px;height:30px;" onclick="upload_profile()">save</button></center>
-        <!-- </form>
- -->        <span><p>Title</p></span>
+       <span><p>Title</p></span>
     </div>
     <div class="clearfix"></div>
     <hr style="margin:5px 0 5px 0;">
@@ -198,7 +193,7 @@
 <div template="upload" class="container-fluid" style="width: 100%">
 <div class="col-sm-6">
     <br>
-    <h1>Upload your recipe</h1><hr><span id="response"></span>
+    <h1>Upload your recipe</h1><hr><br><span id="response" style="font size: 25px ; color: green"></span>
             <div class="form-group">
                 <label for="dish_name" required="required">Dish name</label>
                 <input type="text" name="dish" id="dish" class="form-control">
@@ -227,7 +222,8 @@
                     <option>Herbs & Spices</option>
                     <option>Meat</option>
                     <option>Seafood</option>
-                    <option>Vegetables</option> 
+                    <option>Vegetables</option>
+                    <option>Others</option> 
                     <option>Null</option>                  
                 </select><br><br>
             Ingredient 2: <input type="text" name="in2" id="in2">
@@ -238,7 +234,8 @@
                     <option>Herbs & Spices</option>
                     <option>Meat</option>
                     <option>Seafood</option>
-                    <option>Vegetables</option> 
+                    <option>Vegetables</option>
+                    <option>Others</option> 
                     <option>Null</option> 
                 </select><br><br>
             Ingredient 3: <input type="text" name="in3" id="in3">
@@ -249,7 +246,8 @@
                     <option>Herbs & Spices</option>
                     <option>Meat</option>
                     <option>Seafood</option>
-                    <option>Vegetables</option> 
+                    <option>Vegetables</option>
+                    <option>Others</option> 
                     <option>Null</option>               
                 </select><br><br>
                 Ingredient 4: <input type="text" name="in4" id="in4">
@@ -260,7 +258,8 @@
                     <option>Herbs & Spices</option>
                     <option>Meat</option>
                     <option>Seafood</option>
-                    <option>Vegetables</option> 
+                    <option>Vegetables</option>
+                    <option>Others</option>  
                     <option>Null</option>               
                 </select><br><br>
                 Ingredient 5: <input type="text" name="in5" id="in5">
@@ -271,7 +270,8 @@
                     <option>Herbs & Spices</option>
                     <option>Meat</option>
                     <option>Seafood</option>
-                    <option>Vegetables</option> 
+                    <option>Vegetables</option>
+                    <option>Others</option> 
                     <option>Null</option>                   
                 </select><br><br>
             </p><hr>
@@ -284,7 +284,6 @@
             <input type="file" name="fileToUpload" id="fileToUpload">
             </div></br></br></br>
             <center><button value="Submit" style="width:60px;height:30px;" onclick="upload_recipe()">Submit</button></center>
-        <!-- </form> -->
     </div>
 </div>
 

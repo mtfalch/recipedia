@@ -10,13 +10,14 @@
     if(!$con)
         die("MYSQL Connection Error: " . mysqli_connect_error());
 
-    $userID = $_POST['userID'];
-    $sql = "SELECT first_name from users where userID = '$userID'";
+    $userID = $_SESSION["user"];
+    $sql = "SELECT first_name,pic from users where userID = '$userID'";
     $query = mysqli_query($con, $sql) or die(mysqli_error($con));
 
     $row = mysqli_fetch_assoc($query);
 
     $json -> first_name = $row['first_name'];
+    $json -> pic = $row['pic'];
     echo json_encode($json);
 
 ?>

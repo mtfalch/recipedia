@@ -69,6 +69,7 @@
         mysqli_query($link,$sql_tag_info_1);
         $json -> status = "success";
         $json -> upload_profile = "success";    
+        $json -> user = $user;
     }
     echo json_encode($json);  
 ?>

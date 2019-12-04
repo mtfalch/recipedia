@@ -98,7 +98,6 @@
                    $json -> status = "success";
                    $json -> upload_recipe = "success";
                    ?>
-                   <!-- <img src = '<?php //echo $target_file; ?>' style="width:200px; height: 120px; object-fit: cover;"><br> -->
                    <?php
               }
               else{
@@ -170,7 +169,7 @@
       //insert like_list
       $sql_like_list = "insert INTO `likes_list`(`dishID`, `likes`, `userID`) VALUES (".$newDishID.",0,'".$user."')";
       mysqli_query($link,$sql_like_list);
-      $json -> upload_recipe= "success";
+      $json -> upload_recipe = "success";
     }
   echo json_encode($json);
 ?>
