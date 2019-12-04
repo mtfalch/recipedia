@@ -10,7 +10,7 @@
     $userID = $_POST["email"];
     $password = $_POST["password"];
 
-    $sql = "INSERT into users (userID,password,pic) values ('$userID','$password','')";
+    $sql = "INSERT into users (userID,password) values ('$userID','$password')";
     mysqli_query($con, $sql) or die("Failed: " . mysqli_error());
 
     $obj -> status = "SUCCESS";
